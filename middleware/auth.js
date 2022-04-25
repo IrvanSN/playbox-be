@@ -11,19 +11,26 @@ module.exports = {
       const data = jwt.verify(token, process.env.JWT_KEY);
       await Team.findById(data.team.id)
         .then((r) => {
+          if (!r) {
+            return res.status(500).json({
+              error: true,
+              message: 'Data tim tidak ditemukan atau token tidak valid!',
+            });
+          }
+
           req.team = r;
           req.token = token;
 
           next();
         })
-        .catch(() => {
+        .catch((e) =>
           res.status(500).json({
             error: true,
-            message: 'Not authorized to access this resource!',
-          });
-        });
+            message: 'Data tim tidak ditemukan atau token tidak valid!',
+          })
+        );
     } catch (err) {
-      res.status(500).json({
+      return res.status(500).json({
         error: true,
         message: 'Not authorized to access this resource!',
       });

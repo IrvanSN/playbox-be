@@ -52,8 +52,9 @@ module.exports = {
             team: {
               id: r._id,
               email: r.email,
+              phone: r.phone,
+              category: r.category,
               status: r.status,
-              members: r.members,
             },
           },
           process.env.JWT_KEY
@@ -74,32 +75,34 @@ module.exports = {
       password,
     })
       .then((r) => res.status(200).json({ error: false, data: r }))
-      .catch(() => res.status(500).json({ error: true, data: null }));
+      .catch((e) => res.status(500).json({ error: true, message: e.message }));
   },
-  updateTeam: async (req, res) => {
-    console.log(req.body);
-    const {
-      category,
-      idea_title,
-      idea_description,
-      member_one_name,
-      member_one_institution,
-      member_one_phone,
-      member_one_role,
-      member_one_email,
-      member_two_name,
-      member_two_institution,
-      member_two_phone,
-      member_two_role,
-      member_two_email,
-      member_three_name,
-      member_three_institution,
-      member_three_phone,
-      member_three_role,
-      member_three_email,
-    } = req.body;
+  updateTeam: (req, res) => {
+    const { _id } = req.team;
+    const URL = `${req.protocol}://${req.get('host')}/uploads`;
 
     upload(req, res, (err) => {
+      const {
+        category,
+        idea_title,
+        idea_description,
+        member_one_name,
+        member_one_institution,
+        member_one_phone,
+        member_one_role,
+        member_one_email,
+        member_two_name,
+        member_two_institution,
+        member_two_phone,
+        member_two_role,
+        member_two_email,
+        member_three_name,
+        member_three_institution,
+        member_three_phone,
+        member_three_role,
+        member_three_email,
+      } = req.body;
+
       if (err instanceof multer.MulterError) {
         return res.status(500).json({
           error: true,
@@ -125,8 +128,8 @@ module.exports = {
           email: member_one_email,
           institution: member_one_institution,
           phone: member_one_phone,
-          id_image: req.files.member_one_id_image.path,
-          profile_image: req.files.member_one_profile_image.path,
+          id_image: `${URL}/${req.files.member_one_id_image[0].filename}`,
+          profile_image: `${URL}/${req.files.member_one_profile_image[0].filename}`,
         },
         member_two: {
           name: member_two_name,
@@ -134,8 +137,8 @@ module.exports = {
           email: member_two_email,
           institution: member_two_institution,
           phone: member_two_phone,
-          id_image: req.files.member_two_id_image.path,
-          profile_image: req.files.member_two_profile_image.path,
+          id_image: `${URL}/${req.files.member_two_id_image[0].filename}`,
+          profile_image: `${URL}/${req.files.member_two_profile_image[0].filename}`,
         },
         member_three: {
           name: member_three_name,
@@ -143,14 +146,22 @@ module.exports = {
           email: member_three_email,
           institution: member_three_institution,
           phone: member_three_phone,
-          id_image: req.files.member_three_id_image.path,
-          profile_image: req.files.member_three_profile_image.path,
+          id_image: `${URL}/${req.files.member_three_id_image[0].filename}`,
+          profile_image: `${URL}/${req.files.member_three_profile_image[0].filename}`,
         },
       };
 
-      return res
-        .status(200)
-        .json({ error: false, message: 'Berhasil update data tim' });
+      Team.findByIdAndUpdate(_id, payload)
+        .then(() =>
+          res
+            .status(200)
+            .json({ error: false, message: 'Berhasil update data tim' })
+        )
+        .catch((e) => {
+          res
+            .status(500)
+            .json({ error: false, message: 'Gagal update data tim' });
+        });
     });
   },
 };
