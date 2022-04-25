@@ -1,51 +1,131 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const teamSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-  },
-  phone: {
-    type: String,
-    required: true,
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-  },
-  institution: {
-    type: String,
-  },
-  status: {
-    type: Boolean,
-  },
-  members: [
-    {
+const teamSchema = new mongoose.Schema(
+  {
+    email: {
+      type: String,
+      unique: true,
+      required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      default: '',
+    },
+    status: {
+      type: Boolean,
+      default: false,
+    },
+    member_one: {
+      name: {
+        type: String,
+        default: '',
+      },
+      email: {
+        type: String,
+        default: '',
+      },
+      institution: {
+        type: String,
+        default: '',
+      },
+      phone: {
+        type: String,
+      },
       id_image: {
         type: String,
+        default: '',
       },
       profile_image: {
         type: String,
+        default: '',
       },
       role: {
         type: String,
+        default: '',
       },
     },
-  ],
-  idea: {
-    title: {
-      type: String,
+    member_two: {
+      name: {
+        type: String,
+        default: '',
+      },
+      email: {
+        type: String,
+        default: '',
+      },
+      institution: {
+        type: String,
+        default: '',
+      },
+      phone: {
+        type: String,
+      },
+      id_image: {
+        type: String,
+        default: '',
+      },
+      profile_image: {
+        type: String,
+        default: '',
+      },
+      role: {
+        type: String,
+        default: '',
+      },
     },
-    description: {
-      type: String,
+    member_three: {
+      name: {
+        type: String,
+        default: '',
+      },
+      email: {
+        type: String,
+        default: '',
+      },
+      institution: {
+        type: String,
+        default: '',
+      },
+      phone: {
+        type: String,
+      },
+      id_image: {
+        type: String,
+        default: '',
+      },
+      profile_image: {
+        type: String,
+        default: '',
+      },
+      role: {
+        type: String,
+        default: '',
+      },
+    },
+    idea: {
+      title: {
+        type: String,
+        default: '',
+      },
+      description: {
+        type: String,
+        default: '',
+      },
     },
   },
-});
-
+  {
+    timestamps: true,
+  }
+);
 teamSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);

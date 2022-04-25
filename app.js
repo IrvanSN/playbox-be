@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const methodOverride = require('method-override');
 require('dotenv').config();
 
 mongoose.connect(
@@ -26,6 +27,8 @@ app.use(cors());
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(methodOverride('_method'));
 
 app.use(logger('dev'));
 app.use(express.json());
