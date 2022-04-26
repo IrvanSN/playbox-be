@@ -79,7 +79,7 @@ module.exports = {
   },
   updateTeam: (req, res) => {
     const { _id } = req.team;
-    const URL = `${req.protocol}://${req.get('host')}/uploads`;
+    const URL = process.env.IMG_URL;
 
     upload(req, res, (err) => {
       const {
@@ -109,6 +109,7 @@ module.exports = {
           message: err.message,
         });
       }
+
       if (err) {
         return res.status(500).json({
           error: true,
@@ -128,8 +129,12 @@ module.exports = {
           email: member_one_email,
           institution: member_one_institution,
           phone: member_one_phone,
-          id_image: `${URL}/${req.files.member_one_id_image[0].filename}`,
-          profile_image: `${URL}/${req.files.member_one_profile_image[0].filename}`,
+          id_image: req.files.member_one_id_image
+            ? `${URL}/${req.files.member_one_id_image[0].filename}`
+            : req.team.member_one.id_image,
+          profile_image: req.files.member_one_profile_image
+            ? `${URL}/${req.files.member_one_profile_image[0].filename}`
+            : req.team.member_one.profile_image,
         },
         member_two: {
           name: member_two_name,
@@ -137,8 +142,12 @@ module.exports = {
           email: member_two_email,
           institution: member_two_institution,
           phone: member_two_phone,
-          id_image: `${URL}/${req.files.member_two_id_image[0].filename}`,
-          profile_image: `${URL}/${req.files.member_two_profile_image[0].filename}`,
+          id_image: req.files.member_two_id_image
+            ? `${URL}/${req.files.member_two_id_image[0].filename}`
+            : req.team.member_two.id_image,
+          profile_image: req.files.member_two_profile_image
+            ? `${URL}/${req.files.member_two_profile_image[0].filename}`
+            : req.team.member_two.profile_image,
         },
         member_three: {
           name: member_three_name,
@@ -146,8 +155,12 @@ module.exports = {
           email: member_three_email,
           institution: member_three_institution,
           phone: member_three_phone,
-          id_image: `${URL}/${req.files.member_three_id_image[0].filename}`,
-          profile_image: `${URL}/${req.files.member_three_profile_image[0].filename}`,
+          id_image: req.files.member_three_id_image
+            ? `${URL}/${req.files.member_three_id_image[0].filename}`
+            : req.team.member_three.id_image,
+          profile_image: req.files.member_three_profile_image
+            ? `${URL}/${req.files.member_three_profile_image[0].filename}`
+            : req.team.member_three.profile_image,
         },
       };
 
@@ -157,11 +170,11 @@ module.exports = {
             .status(200)
             .json({ error: false, message: 'Berhasil update data tim' })
         )
-        .catch((e) => {
+        .catch(() =>
           res
             .status(500)
-            .json({ error: false, message: 'Gagal update data tim' });
-        });
+            .json({ error: false, message: 'Gagal update data tim' })
+        );
     });
   },
 };
