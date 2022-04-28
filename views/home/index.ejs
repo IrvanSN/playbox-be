@@ -1,0 +1,160 @@
+<%- include('../parts/header.ejs') %>
+<body>
+
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../parts/navbar.ejs') %>
+
+    <!-- Sidebar Start -->
+    <%- include('../parts/sidebar.ejs') %>
+
+    <!-- Main Container Start -->
+    <main class="main--container">
+        <!-- Page Header Start -->
+        <section class="page--header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Page Title Start -->
+                        <h2 class="page--title h5">Home</h2>
+                        <!-- Page Title End -->
+
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item active"><a href="/">Home</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Page Header End -->
+
+        <!-- Main Content Start -->
+        <section class="main--content">
+            <div class="row gutter-20">
+                <div class="col-md-4">
+                    <div class="panel">
+                        <div class="miniStats--panel">
+                            <div class="miniStats--header bg-darker">
+                            </div>
+
+                            <div class="miniStats--body">
+                                <i class="miniStats--icon fa fa-money-bill-alt text-blue"></i>
+
+                                <p class="miniStats--caption text-blue">Total</p>
+                                <h3 class="miniStats--title h4">Pendapatan</h3>
+                                <p class="miniStats--num text-blue">Rp 1.000.000</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel">
+                        <div class="miniStats--panel">
+                            <div class="miniStats--header bg-darker">
+                            </div>
+
+                            <div class="miniStats--body">
+                                <i class="miniStats--icon fa fa-users text-orange"></i>
+
+                                <p class="miniStats--caption text-orange">Total</p>
+                                <h3 class="miniStats--title h4">Tim Aktif</h3>
+                                <p class="miniStats--num text-orange">23</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="panel">
+                        <div class="miniStats--panel">
+                            <div class="miniStats--header bg-darker">
+                            </div>
+
+                            <div class="miniStats--body">
+                                <i class="miniStats--icon fa fa-users text-green"></i>
+                                <p class="miniStats--caption text-green">Total</p>
+                                <h3 class="miniStats--title h4">Semua Tim</h3>
+                                <p class="miniStats--num text-green">132</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-12">
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                TIM TERBARU
+                            </h3>
+                        </div>
+
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table style--2">
+                                    <thead>
+                                    <tr>
+                                        <th>Nama Tim</th>
+                                        <th>Email</th>
+                                        <th>No Telepon</th>
+                                        <th>Kategori</th>
+                                        <th>Ide Tim</th>
+                                        <th>Status</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- Table Row Start -->
+                                    <tr>
+                                        <td>SEMICOLON TEAM</td>
+                                        <td>iaarn@sssfesf.com</td>
+                                        <td>082193393939</td>
+                                        <td>MHS</td>
+                                        <td>Sistem Manajemen Coffee Shop</td>
+                                        <td><span class="label label-success">Aktif</span></td>
+                                    </tr>
+                                    <!-- Table Row End -->
+
+                                    <!-- Table Row Start -->
+                                    <tr>
+                                        <td>SEMICOLON TEAM</td>
+                                        <td>iaarn@sssfesf.com</td>
+                                        <td>082193393939</td>
+                                        <td>MHS</td>
+                                        <td>Sistem Manajemen Coffee Shop</td>
+                                        <td><span class="label label-success">Aktif</span></td>
+                                    </tr>
+                                    <!-- Table Row End -->
+
+                                    <!-- Table Row Start -->
+                                    <tr>
+                                        <td>SEMICOLON TEAM</td>
+                                        <td>iaarn@sssfesf.com</td>
+                                        <td>082193393939</td>
+                                        <td>MHS</td>
+                                        <td>Sistem Manajemen Coffee Shop</td>
+                                        <td><span class="label label-danger">Non-aktif</span></td>
+                                    </tr>
+                                    <!-- Table Row End -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Main Content End -->
+
+        <!-- Main Footer Start -->
+        <footer class="main--footer main--footer-light">
+            <p>CODER Institut Teknologi Telkom Surabaya - 2022</p>
+        </footer>
+        <!-- Main Footer End -->
+    </main>
+    <!-- Main Container End -->
+</div>
+<!-- Wrapper End -->
+
+<!-- Scripts -->
+<%- include('../parts/scripts') %>

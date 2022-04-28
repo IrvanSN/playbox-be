@@ -67,9 +67,10 @@ module.exports = {
       });
   },
   addTeam: async (req, res) => {
-    const { email, phone, password } = req.body;
+    const { name, email, phone, password } = req.body;
 
     await Team.create({
+      name,
       email,
       phone,
       password,

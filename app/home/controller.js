@@ -1,5 +1,5 @@
 module.exports = {
   index: async (req, res) => {
-    res.send('Hello');
+    res.render('home/index.ejs');
   },
 };
