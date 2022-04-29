@@ -20,6 +20,7 @@ mongoose.connect(
 );
 
 const apiRouter = require('./api/routes');
+const callbackRouter = require('./callback/routes');
 const homeRouter = require('./app/home/routes');
 const authRouter = require('./app/auth/routes');
 
@@ -38,6 +39,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api', apiRouter);
+app.use('/cb', callbackRouter);
 app.use('/', homeRouter);
 app.use('/auth', authRouter);
 

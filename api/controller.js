@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const CryptoJS = require('crypto-js');
+const axios = require('axios');
 const Team = require('../app/team/model');
 
 const fileStorage = multer.diskStorage({
@@ -33,12 +35,12 @@ const upload = multer({
   limits: { fileSize: 1024 * 1024 * 2 },
   fileFilter,
 }).fields([
-  { name: 'member_one_id_image' },
-  { name: 'member_one_profile_image' },
-  { name: 'member_two_id_image' },
-  { name: 'member_two_profile_image' },
-  { name: 'member_three_id_image' },
-  { name: 'member_three_profile_image' },
+  { name: 'memberOneIdImage' },
+  { name: 'memberOneProfileImage' },
+  { name: 'memberTwoIdImage' },
+  { name: 'memberTwoProfileImage' },
+  { name: 'memberThreeIdImage' },
+  { name: 'memberThreeProfileImage' },
 ]);
 
 module.exports = {
@@ -66,6 +68,17 @@ module.exports = {
         res.status(500).json({ error: true, message: e.message });
       });
   },
+  getTeam: async (req, res) => {
+    const { id } = req.params;
+
+    await Team.findById(id)
+      .then((r) => {
+        res.status(200).json({ error: false, data: r });
+      })
+      .catch((e) => {
+        res.status(500).json({ error: true, data: e.message });
+      });
+  },
   addTeam: async (req, res) => {
     const { name, email, phone, password } = req.body;
 
@@ -85,23 +98,23 @@ module.exports = {
     upload(req, res, (err) => {
       const {
         category,
-        idea_title,
-        idea_description,
-        member_one_name,
-        member_one_institution,
-        member_one_phone,
-        member_one_role,
-        member_one_email,
-        member_two_name,
-        member_two_institution,
-        member_two_phone,
-        member_two_role,
-        member_two_email,
-        member_three_name,
-        member_three_institution,
-        member_three_phone,
-        member_three_role,
-        member_three_email,
+        ideaTitle,
+        ideaDescription,
+        memberOneName,
+        memberOneInstitution,
+        memberOnePhone,
+        memberOneRole,
+        memberOneEmail,
+        memberTwoName,
+        memberTwoInstitution,
+        memberTwoPhone,
+        memberTwoRole,
+        memberTwoEmail,
+        memberThreeName,
+        memberThreeInstitution,
+        memberThreePhone,
+        memberThreeRole,
+        memberThreeEmail,
       } = req.body;
 
       if (err instanceof multer.MulterError) {
@@ -121,46 +134,46 @@ module.exports = {
       const payload = {
         category,
         idea: {
-          title: idea_title,
-          description: idea_description,
+          title: ideaTitle,
+          description: ideaDescription,
         },
         member_one: {
-          name: member_one_name,
-          role: member_one_role,
-          email: member_one_email,
-          institution: member_one_institution,
-          phone: member_one_phone,
-          id_image: req.files.member_one_id_image
-            ? `${URL}/${req.files.member_one_id_image[0].filename}`
+          name: memberOneName,
+          role: memberOneRole,
+          email: memberOneEmail,
+          institution: memberOneInstitution,
+          phone: memberOnePhone,
+          id_image: req.files.memberOneIdImage
+            ? `${URL}/${req.files.memberOneIdImage[0].filename}`
             : req.team.member_one.id_image,
-          profile_image: req.files.member_one_profile_image
-            ? `${URL}/${req.files.member_one_profile_image[0].filename}`
+          profile_image: req.files.memberOneProfileImage
+            ? `${URL}/${req.files.memberOneProfileImage[0].filename}`
             : req.team.member_one.profile_image,
         },
         member_two: {
-          name: member_two_name,
-          role: member_two_role,
-          email: member_two_email,
-          institution: member_two_institution,
-          phone: member_two_phone,
-          id_image: req.files.member_two_id_image
-            ? `${URL}/${req.files.member_two_id_image[0].filename}`
+          name: memberTwoName,
+          role: memberTwoRole,
+          email: memberTwoEmail,
+          institution: memberTwoInstitution,
+          phone: memberTwoPhone,
+          id_image: req.files.memberTwoIdImage
+            ? `${URL}/${req.files.memberTwoIdImage[0].filename}`
             : req.team.member_two.id_image,
-          profile_image: req.files.member_two_profile_image
-            ? `${URL}/${req.files.member_two_profile_image[0].filename}`
+          profile_image: req.files.memberTwoProfileImage
+            ? `${URL}/${req.files.memberTwoProfileImage[0].filename}`
             : req.team.member_two.profile_image,
         },
         member_three: {
-          name: member_three_name,
-          role: member_three_role,
-          email: member_three_email,
-          institution: member_three_institution,
-          phone: member_three_phone,
-          id_image: req.files.member_three_id_image
-            ? `${URL}/${req.files.member_three_id_image[0].filename}`
+          name: memberThreeName,
+          role: memberThreeRole,
+          email: memberThreeEmail,
+          institution: memberThreeInstitution,
+          phone: memberThreePhone,
+          id_image: req.files.memberThreeIdImage
+            ? `${URL}/${req.files.memberThreeIdImage[0].filename}`
             : req.team.member_three.id_image,
-          profile_image: req.files.member_three_profile_image
-            ? `${URL}/${req.files.member_three_profile_image[0].filename}`
+          profile_image: req.files.memberProfileImage
+            ? `${URL}/${req.files.memberProfileImage[0].filename}`
             : req.team.member_three.profile_image,
         },
       };
@@ -177,5 +190,60 @@ module.exports = {
             .json({ error: false, message: 'Gagal update data tim' })
         );
     });
+  },
+  teamPayment: async (req, res) => {
+    const URL = process.env.API_URL_IPAYMU;
+    const { _id, email, phone, category, name } = req.team;
+
+    const body = {
+      product: [
+        `Pendaftaran Playbox Season 3 Kategori ${
+          category === 'MHS' ? 'Mahasiswa' : category === 'SMA' ? 'SMA/SMK' : ''
+        }`,
+      ],
+      qty: ['1'],
+      price: [category === 'MHS' ? 20000 : category === 'SMA' ? 15000 : ''],
+      returnUrl: 'http://local.erpn.us:3010/payment/success',
+      cancelUrl: 'http://local.erpn.us:3010/payment/failed',
+      notifyUrl: 'http://local.erpn.us:3010/cb/notify',
+      buyerName: name,
+      buyerEmail: email,
+      buyerPhone: phone,
+      referenceId: _id,
+    };
+
+    const bodyStringify = JSON.stringify(body);
+    const bodyEncrypt = CryptoJS.SHA256(bodyStringify);
+    const stringToSign = `POST:${process.env.VA_IPAYMU}:${bodyEncrypt}:${process.env.API_KEY_IPAYMU}`;
+    const signature = CryptoJS.enc.Hex.stringify(
+      CryptoJS.HmacSHA256(stringToSign, process.env.API_KEY_IPAYMU)
+    );
+
+    axios({
+      method: 'post',
+      url: URL,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        va: process.env.VA_IPAYMU,
+        signature,
+        timestamps: new Date().getTime(),
+      },
+      data: bodyStringify,
+    })
+      .then((r) => {
+        const payload = {
+          error: false,
+          data: {
+            url: r.data.Data.Url,
+            sessionId: r.data.Data.SessionID,
+          },
+        };
+
+        res.status(200).json(payload);
+      })
+      .catch((e) => {
+        res.status(400).json({ error: true, data: e.response.data });
+      });
   },
 };

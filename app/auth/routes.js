@@ -5,6 +5,6 @@ const { index, actionSignin, actionSignout } = require('./controller');
 
 router.get('/', index);
 router.post('/login', actionSignin);
-router.post('/logout', actionSignout);
+router.get('/logout', actionSignout);
 
 module.exports = router;
