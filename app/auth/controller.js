@@ -28,8 +28,7 @@ module.exports = {
         });
         res.redirect('/');
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
         res.redirect('/auth');
       });
   },
