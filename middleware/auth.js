@@ -2,6 +2,21 @@ const jwt = require('jsonwebtoken');
 const Team = require('../app/team/model');
 
 module.exports = {
+  isLoginAdmin: async (req, res, next) => {
+    const token = req.cookies.session;
+
+    if (token) {
+      jwt.verify(token, process.env.JWT_KEY, (err, decodedToken) => {
+        if (err) {
+          res.redirect('/auth');
+        } else {
+          next();
+        }
+      });
+    } else {
+      res.redirect('/auth');
+    }
+  },
   isLoginTeam: async (req, res, next) => {
     try {
       const token = req.headers.authorization

@@ -19,8 +19,9 @@ mongoose.connect(
   }
 );
 
-const homeRouter = require('./app/home/routes');
 const apiRouter = require('./api/routes');
+const homeRouter = require('./app/home/routes');
+const authRouter = require('./app/auth/routes');
 
 const app = express();
 app.use(cors());
@@ -36,8 +37,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', homeRouter);
 app.use('/api', apiRouter);
+app.use('/', homeRouter);
+app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
   next(createError(404));

@@ -1,0 +1,54 @@
+<%- include('../parts/header.ejs') %>
+<body>
+<div class='wrapper'>
+    <div class='m-account-w' data-bg-img=''>
+        <div class='m-account'>
+            <div class="m-account--form-w">
+                <div class="m-account--form">
+                    <!-- Logo Start -->
+                    <div class="logo">
+                        <img src="images/auth-logo.png" alt="">
+                    </div>
+                    <!-- Logo End -->
+
+                    <form action="/auth/login" method="post">
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <i class="fas fa-user"></i>
+                                </div>
+
+                                <input type="text" name="username" placeholder="Username" class="form-control"
+                                       autocomplete="off" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <i class="fas fa-key"></i>
+                                </div>
+
+                                <input type="password" name="password" placeholder="Password" class="form-control"
+                                       autocomplete="off" required>
+                            </div>
+                        </div>
+
+                        <div class="m-account--actions">
+                            <div class='justify-content-center'>
+                                <button type="submit" class="btn btn-rounded btn-info ">Login</button>
+                            </div>
+                        </div>
+
+                        <div class="m-account--footer">
+                            <p>CODER ITTelkom Surabaya - 2022</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<%- include('../parts/scripts') %>
