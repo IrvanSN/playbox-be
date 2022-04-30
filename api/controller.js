@@ -192,7 +192,7 @@ module.exports = {
     });
   },
   teamPayment: async (req, res) => {
-    const URL = process.env.API_URL_IPAYMU;
+    const URL = `${process.env.API_URL_IPAYMU}/payment`;
     const { _id, email, phone, category, name } = req.team;
 
     const body = {
@@ -203,9 +203,9 @@ module.exports = {
       ],
       qty: ['1'],
       price: [category === 'MHS' ? 20000 : category === 'SMA' ? 15000 : ''],
-      returnUrl: 'http://local.erpn.us:3010/payment/success',
-      cancelUrl: 'http://local.erpn.us:3010/payment/failed',
-      notifyUrl: 'http://local.erpn.us:3010/cb/notify',
+      returnUrl: 'https://playbox.coderitts.tech/payment/success',
+      cancelUrl: 'https://playbox.coderitts.tech/payment/failed',
+      notifyUrl: 'https://88a0-140-213-49-247.ngrok.io/cb/notify',
       buyerName: name,
       buyerEmail: email,
       buyerPhone: phone,
