@@ -193,7 +193,13 @@ module.exports = {
   },
   teamPayment: async (req, res) => {
     const URL = `${process.env.API_URL_IPAYMU}/payment`;
-    const { _id, email, phone, category, name } = req.team;
+    const { _id, email, phone, category, name, status } = req.team;
+
+    if (!status) {
+      res
+        .status(500)
+        .json({ error: false, message: 'Sudah melakukan pembayaran' });
+    }
 
     const body = {
       product: [
@@ -205,7 +211,7 @@ module.exports = {
       price: [category === 'MHS' ? 20000 : category === 'SMA' ? 15000 : ''],
       returnUrl: 'https://playbox.coderitts.tech/payment/success',
       cancelUrl: 'https://playbox.coderitts.tech/payment/failed',
-      notifyUrl: 'https://88a0-140-213-49-247.ngrok.io/cb/notify',
+      notifyUrl: process.env.NOTIFY_URL_IPAYMU,
       buyerName: name,
       buyerEmail: email,
       buyerPhone: phone,
