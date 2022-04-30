@@ -195,7 +195,7 @@ module.exports = {
     const URL = `${process.env.API_URL_IPAYMU}/payment`;
     const { _id, email, phone, category, name, status } = req.team;
 
-    if (!status) {
+    if (status) {
       res
         .status(500)
         .json({ error: false, message: 'Sudah melakukan pembayaran' });
