@@ -69,6 +69,17 @@ module.exports = {
       });
   },
   getTeam: async (req, res) => {
+    const { id } = req.team;
+
+    await Team.findById(id)
+      .then((r) => {
+        res.status(200).json({ error: false, data: r });
+      })
+      .catch((e) => {
+        res.status(500).json({ error: true, data: e.message });
+      });
+  },
+  getTeamById: async (req, res) => {
     const { id } = req.params;
 
     await Team.findById(id)
@@ -79,6 +90,7 @@ module.exports = {
         res.status(500).json({ error: true, data: e.message });
       });
   },
+
   addTeam: async (req, res) => {
     const { name, email, phone, password } = req.body;
 
@@ -91,15 +103,13 @@ module.exports = {
       .then((r) => res.status(200).json({ error: false, data: r }))
       .catch((e) => res.status(500).json({ error: true, message: e.message }));
   },
-  updateTeam: (req, res) => {
+  updateBiodataTeam: (req, res) => {
     const { _id } = req.team;
     const URL = process.env.IMG_URL;
 
     upload(req, res, (err) => {
       const {
         category,
-        ideaTitle,
-        ideaDescription,
         memberOneName,
         memberOneInstitution,
         memberOnePhone,
@@ -133,10 +143,6 @@ module.exports = {
 
       const payload = {
         category,
-        idea: {
-          title: ideaTitle,
-          description: ideaDescription,
-        },
         member_one: {
           name: memberOneName,
           role: memberOneRole,
@@ -182,14 +188,24 @@ module.exports = {
         .then(() =>
           res
             .status(200)
-            .json({ error: false, message: 'Berhasil update data tim' })
+            .json({ error: false, message: 'Berhasil update biodata tim' })
         )
-        .catch(() =>
-          res
-            .status(500)
-            .json({ error: false, message: 'Gagal update data tim' })
+        .catch((e) =>
+          res.status(500).json({ error: false, message: e.message })
         );
     });
+  },
+  updateIdeaTeam: async (req, res) => {
+    const { _id } = req.team;
+    const { idea } = req.body;
+
+    Team.findByIdAndUpdate(_id, { idea })
+      .then(() =>
+        res
+          .status(200)
+          .json({ error: false, message: 'Berhasil update ide tim' })
+      )
+      .catch((e) => res.status(500).json({ error: true, message: e.message }));
   },
   teamPayment: async (req, res) => {
     const URL = `${process.env.API_URL_IPAYMU}/payment`;
