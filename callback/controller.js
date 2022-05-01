@@ -4,15 +4,17 @@ module.exports = {
   notify: async (req, res) => {
     const { reference_id, status } = req.body;
     const updatedStatus = status === 'berhasil';
-    console.log('req.rawHeaders:', req.rawHeaders);
-    console.log('req.rawHeaders[1]:', req.rawHeaders[1]);
+    const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    console.log('ip headers:', ip);
+    console.log('req.hostname:', req.hostname);
+    console.log('req.ip:', req.ip);
+    console.log('req.ips:', req.ips);
+    console.log('req.body:', req.body);
 
     Team.findByIdAndUpdate(reference_id, { status: updatedStatus })
       .then(() => {
         res.status(200).json({
           error: false,
-          reqdotrawHeaders: req.rawHeaders,
-          reqdotrawHeadersIndexOne: req.rawHeaders[1],
         });
       })
       .catch(() => {
