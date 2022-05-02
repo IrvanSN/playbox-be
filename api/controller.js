@@ -215,9 +215,16 @@ module.exports = {
     const { _id, email, phone, category, name, status } = req.team;
 
     if (status) {
-      res
+      return res
         .status(500)
-        .json({ error: false, message: 'Sudah melakukan pembayaran' });
+        .json({ error: true, message: 'Sudah melakukan pembayaran' });
+    }
+
+    if (category === '') {
+      return res.status(500).json({
+        error: true,
+        message: 'Kategori masih kosong, silahkan update data anda!',
+      });
     }
 
     const body = {
@@ -265,10 +272,18 @@ module.exports = {
           },
         };
 
-        res.status(200).json(payload);
+        return res.status(200).json(payload);
       })
       .catch((e) => {
-        res.status(400).json({ error: true, data: e.response.data });
+        const payload = {
+          error: true,
+          data: {
+            status: e.response.data.Status,
+            message: e.response.data.Message,
+          },
+        };
+
+        return res.status(400).json(payload);
       });
   },
 };
