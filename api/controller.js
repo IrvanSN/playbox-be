@@ -211,7 +211,7 @@ module.exports = {
       .catch((e) => res.status(500).json({ error: true, message: e.message }));
   },
   teamPayment: async (req, res) => {
-    const URL = 'https://sandbox.ipaymu.com/api/v2/payment';
+    const URL = `${process.env.API_URL_IPAYMU}/payment`;
     const { _id, email, phone, category, name, status } = req.team;
 
     if (status) {
@@ -245,6 +245,8 @@ module.exports = {
       referenceId: _id,
       expired: 24,
     };
+
+    console.log(body);
 
     const bodyStringify = JSON.stringify(body);
     const bodyEncrypt = CryptoJS.SHA256(bodyStringify);
