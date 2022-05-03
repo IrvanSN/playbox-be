@@ -213,12 +213,20 @@ module.exports = {
     } = req.team;
 
     if (status) {
-      res
+      return res
         .status(500)
-        .json({ error: false, message: 'Sudah melakukan pembayaran' });
+        .json({ error: true, message: 'Sudah melakukan pembayaran' });
+    }
+
+    if (category === '') {
+      return res.status(500).json({
+        error: true,
+        message: 'Kategori masih kosong, silahkan update data anda!',
+      });
     }
 
     const body = {
+      account: process.env.VA_IPAYMU,
       product: [
         `Pendaftaran Playbox Season 3 Kategori ${
           category === 'MHS' ? 'Mahasiswa' : category === 'SMA' ? 'SMA/SMK' : ''
@@ -233,7 +241,10 @@ module.exports = {
       buyerEmail: email,
       buyerPhone: phone,
       referenceId: _id,
+      expired: 24,
     };
+
+    console.log(body);
 
     const bodyStringify = JSON.stringify(body);
     const bodyEncrypt = CryptoJS.SHA256(bodyStringify);
@@ -263,10 +274,18 @@ module.exports = {
           },
         };
 
-        res.status(200).json(payload);
+        return res.status(200).json(payload);
       })
       .catch((e) => {
-        res.status(400).json({ error: true, data: e.response.data });
+        const payload = {
+          error: true,
+          data: {
+            status: e.response.data.Status,
+            message: e.response.data.Message,
+          },
+        };
+
+        return res.status(400).json(payload);
       });
   },
 };
