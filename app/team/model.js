@@ -125,6 +125,17 @@ const teamSchema = new mongoose.Schema(
         default: '',
       },
     },
+    paymentSessionId: {
+      type: String,
+    },
+    payment: {
+      via: {
+        type: String,
+      },
+      status: {
+        type: String,
+      },
+    },
   },
   {
     timestamps: true,

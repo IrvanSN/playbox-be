@@ -13,16 +13,16 @@ const fileStorage = multer.diskStorage({
       null,
       `${file.fieldname}-${new Date().getTime()}.${
         file.originalname.split('.')[file.originalname.split('.').length - 1]
-      }`,
+      }`
     );
   },
 });
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === 'image/png'
-    || file.mimetype === 'image/jpg'
-    || file.mimetype === 'image/jpeg'
+    file.mimetype === 'image/png' ||
+    file.mimetype === 'image/jpg' ||
+    file.mimetype === 'image/jpeg'
   ) {
     cb(null, true);
   } else {
@@ -61,7 +61,7 @@ module.exports = {
             },
           },
           process.env.JWT_KEY,
-          { expiresIn: tokenExpires },
+          { expiresIn: tokenExpires }
         );
 
         res.status(200).json({ error: false, data: { token } });
@@ -94,9 +94,7 @@ module.exports = {
   },
 
   addTeam: async (req, res) => {
-    const {
-      name, email, phone, password,
-    } = req.body;
+    const { name, email, phone, password } = req.body;
 
     await Team.create({
       name,
@@ -190,10 +188,14 @@ module.exports = {
       };
 
       Team.findByIdAndUpdate(_id, payload)
-        .then(() => res
-          .status(200)
-          .json({ error: false, message: 'Berhasil update biodata tim' }))
-        .catch((e) => res.status(500).json({ error: false, message: e.message }));
+        .then(() =>
+          res
+            .status(200)
+            .json({ error: false, message: 'Berhasil update biodata tim' })
+        )
+        .catch((e) =>
+          res.status(500).json({ error: false, message: e.message })
+        );
     });
   },
   updateIdeaTeam: async (req, res) => {
@@ -201,16 +203,16 @@ module.exports = {
     const { idea } = req.body;
 
     Team.findByIdAndUpdate(_id, { idea })
-      .then(() => res
-        .status(200)
-        .json({ error: false, message: 'Berhasil update ide tim' }))
+      .then(() =>
+        res
+          .status(200)
+          .json({ error: false, message: 'Berhasil update ide tim' })
+      )
       .catch((e) => res.status(500).json({ error: true, message: e.message }));
   },
   teamPayment: async (req, res) => {
     const URL = `${process.env.API_URL_IPAYMU}/payment`;
-    const {
-      _id, email, phone, category, name, status,
-    } = req.team;
+    const { _id, email, phone, category, name, status } = req.team;
 
     if (status) {
       return res
@@ -241,16 +243,15 @@ module.exports = {
       buyerEmail: email,
       buyerPhone: phone,
       referenceId: _id,
+      paymentMethod: 'va',
       expired: 24,
     };
-
-    console.log(body);
 
     const bodyStringify = JSON.stringify(body);
     const bodyEncrypt = CryptoJS.SHA256(bodyStringify);
     const stringToSign = `POST:${process.env.VA_IPAYMU}:${bodyEncrypt}:${process.env.API_KEY_IPAYMU}`;
     const signature = CryptoJS.enc.Hex.stringify(
-      CryptoJS.HmacSHA256(stringToSign, process.env.API_KEY_IPAYMU),
+      CryptoJS.HmacSHA256(stringToSign, process.env.API_KEY_IPAYMU)
     );
 
     axios({
@@ -265,16 +266,20 @@ module.exports = {
       },
       data: bodyStringify,
     })
-      .then((r) => {
-        const payload = {
-          error: false,
-          data: {
-            url: r.data.Data.Url,
-            sessionId: r.data.Data.SessionID,
-          },
-        };
+      .then(async (r) => {
+        await Team.findByIdAndUpdate(_id, {
+          paymentSessionId: r.data.Data.SessionID,
+        }).then(() => {
+          const payload = {
+            error: false,
+            data: {
+              url: r.data.Data.Url,
+              sessionId: r.data.Data.SessionID,
+            },
+          };
 
-        return res.status(200).json(payload);
+          return res.status(200).json(payload);
+        });
       })
       .catch((e) => {
         const payload = {
