@@ -180,8 +180,8 @@ module.exports = {
           id_image: req.files.memberThreeIdImage
             ? `${URL}/${req.files.memberThreeIdImage[0].filename}`
             : req.team.member_three.id_image,
-          profile_image: req.files.memberProfileImage
-            ? `${URL}/${req.files.memberProfileImage[0].filename}`
+          profile_image: req.files.memberThreeProfileImage
+            ? `${URL}/${req.files.memberThreeProfileImage[0].filename}`
             : req.team.member_three.profile_image,
         },
       };
@@ -266,7 +266,7 @@ module.exports = {
     })
       .then(async (r) => {
         await Team.findByIdAndUpdate(_id, {
-          paymentSessionId: r.data.Data.SessionID,
+          payment: { sessionId: r.data.Data.SessionID },
         }).then(() => {
           const payload = {
             error: false,

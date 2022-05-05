@@ -139,6 +139,12 @@ const teamSchema = new mongoose.Schema(
       type: String,
     },
     payment: {
+      sessionId: {
+        type: String,
+      },
+      total: {
+        type: Number,
+      },
       via: {
         type: String,
       },
