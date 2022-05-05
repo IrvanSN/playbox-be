@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const CryptoJS = require('crypto-js');
-const axios = require('axios');
 const Team = require('../app/team/model');
+const { callAPI } = require('../config/ipaymu');
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -13,16 +12,16 @@ const fileStorage = multer.diskStorage({
       null,
       `${file.fieldname}-${new Date().getTime()}.${
         file.originalname.split('.')[file.originalname.split('.').length - 1]
-      }`
+      }`,
     );
   },
 });
 
 const fileFilter = (req, file, cb) => {
   if (
-    file.mimetype === 'image/png' ||
-    file.mimetype === 'image/jpg' ||
-    file.mimetype === 'image/jpeg'
+    file.mimetype === 'image/png'
+    || file.mimetype === 'image/jpg'
+    || file.mimetype === 'image/jpeg'
   ) {
     cb(null, true);
   } else {
@@ -57,10 +56,11 @@ module.exports = {
               phone: r.phone,
               category: r.category,
               status: r.status,
+              paymentStatus: r.payment.status,
             },
           },
           process.env.JWT_KEY,
-          { expiresIn: '24h' }
+          { expiresIn: '24h' },
         );
 
         res.status(200).json({ error: false, data: { token } });
@@ -93,7 +93,9 @@ module.exports = {
   },
 
   addTeam: async (req, res) => {
-    const { name, email, phone, password } = req.body;
+    const {
+      name, email, phone, password,
+    } = req.body;
 
     await Team.create({
       name,
@@ -187,14 +189,10 @@ module.exports = {
       };
 
       Team.findByIdAndUpdate(_id, payload)
-        .then(() =>
-          res
-            .status(200)
-            .json({ error: false, message: 'Berhasil update biodata tim' })
-        )
-        .catch((e) =>
-          res.status(500).json({ error: false, message: e.message })
-        );
+        .then(() => res
+          .status(200)
+          .json({ error: false, message: 'Berhasil update biodata tim' }))
+        .catch((e) => res.status(500).json({ error: false, message: e.message }));
     });
   },
   updateIdeaTeam: async (req, res) => {
@@ -202,93 +200,99 @@ module.exports = {
     const { idea } = req.body;
 
     Team.findByIdAndUpdate(_id, { idea })
-      .then(() =>
-        res
-          .status(200)
-          .json({ error: false, message: 'Berhasil update ide tim' })
-      )
+      .then(() => res
+        .status(200)
+        .json({ error: false, message: 'Berhasil update ide tim' }))
       .catch((e) => res.status(500).json({ error: true, message: e.message }));
   },
   teamPayment: async (req, res) => {
-    const URL = `${process.env.API_URL_IPAYMU}/payment`;
-    const { _id, email, phone, category, name, status } = req.team;
+    const { _id } = req.team;
 
-    if (status) {
-      return res
-        .status(500)
-        .json({ error: true, message: 'Sudah melakukan pembayaran' });
-    }
-
-    if (category === '') {
-      return res.status(500).json({
-        error: true,
-        message: 'Kategori masih kosong, silahkan update data anda!',
-      });
-    }
-
-    const body = {
-      account: process.env.VA_IPAYMU,
-      product: [
-        `Pendaftaran Playbox Season 3 Kategori ${
-          category === 'MHS' ? 'Mahasiswa' : category === 'SMA' ? 'SMA/SMK' : ''
-        }`,
-      ],
-      qty: ['1'],
-      price: [category === 'MHS' ? 20000 : category === 'SMA' ? 15000 : ''],
-      returnUrl: 'https://playbox.coderitts.tech/payment/success',
-      cancelUrl: 'https://playbox.coderitts.tech/payment/failed',
-      notifyUrl: `${process.env.NOTIFY_URL_IPAYMU}/${_id}`,
-      buyerName: name,
-      buyerEmail: email,
-      buyerPhone: phone,
-      referenceId: _id,
-      expired: 24,
-    };
-
-    const bodyStringify = JSON.stringify(body);
-    const bodyEncrypt = CryptoJS.SHA256(bodyStringify);
-    const stringToSign = `POST:${process.env.VA_IPAYMU}:${bodyEncrypt}:${process.env.API_KEY_IPAYMU}`;
-    const signature = CryptoJS.enc.Hex.stringify(
-      CryptoJS.HmacSHA256(stringToSign, process.env.API_KEY_IPAYMU)
-    );
-
-    axios({
-      method: 'post',
-      url: URL,
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        va: process.env.VA_IPAYMU,
-        signature,
-        timestamps: new Date().getTime(),
-      },
-      data: bodyStringify,
-    })
+    await Team.findById(_id)
       .then(async (r) => {
-        await Team.findByIdAndUpdate(_id, {
-          payment: { sessionId: r.data.Data.SessionID },
-        }).then(() => {
-          const payload = {
-            error: false,
-            data: {
-              url: r.data.Data.Url,
-              sessionId: r.data.Data.SessionID,
-            },
-          };
+        if (!r.status) {
+          return res.status(500).json({
+            error: true,
+            message: 'Akun belum di setujui oleh admin!',
+          });
+        }
 
-          return res.status(200).json(payload);
-        });
-      })
-      .catch((e) => {
-        const payload = {
-          error: true,
-          data: {
-            status: e.response.data.Status,
-            message: e.response.data.Message,
-          },
+        if (r.payment.status) {
+          return res
+            .status(500)
+            .json({ error: true, message: 'Sudah melakukan pembayaran!' });
+        }
+
+        if (r.category === '') {
+          return res.status(500).json({
+            error: true,
+            message: 'Kategori masih kosong, silahkan update data anda!',
+          });
+        }
+
+        const body = {
+          account: process.env.VA_IPAYMU,
+          product: [
+            `Pendaftaran Playbox Season 3 Kategori ${
+              r.category === 'MHS'
+                ? 'Mahasiswa'
+                : r.category === 'SMA'
+                  ? 'SMA/SMK'
+                  : ''
+            }`,
+          ],
+          qty: ['1'],
+          price: [
+            r.category === 'MHS' ? 20000 : r.category === 'SMA' ? 15000 : '',
+          ],
+          returnUrl: 'https://playbox.coderitts.tech/payment/success',
+          cancelUrl: 'https://playbox.coderitts.tech/payment/failed',
+          notifyUrl: `${process.env.NOTIFY_URL_IPAYMU}/${r._id}`,
+          buyerName: r.name,
+          buyerEmail: r.email,
+          buyerPhone: r.phone,
+          referenceId: r._id,
+          expired: 24,
         };
 
-        return res.status(400).json(payload);
+        const payment = await callAPI(body, 'POST', `${process.env.API_URL_IPAYMU}/payment`);
+
+        if (payment.Status !== 200) {
+          const payload = {
+            error: true,
+            message: payment.Message,
+          };
+          return res.status(500).json(payload);
+        }
+
+        await Team.findByIdAndUpdate(_id, {
+          payment: { sessionId: payment.Data.SessionID },
+        })
+          .then(() => {
+            const payload = {
+              error: false,
+              data: {
+                url: payment.Data.Url,
+                sessionId: payment.Data.SessionID,
+              },
+            };
+
+            return res.status(200).json(payload);
+          })
+          .catch(() => {
+            const payload = {
+              error: true,
+              message: 'Akun anda tidak ditemukan!',
+            };
+
+            return res.status(500).json(payload);
+          });
+      })
+      .catch((e) => {
+        res.status(500).json({
+          error: true,
+          message: 'Akun anda tidak ditemukan!',
+        });
       });
   },
 };

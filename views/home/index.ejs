@@ -43,7 +43,8 @@
 
                                 <p class="miniStats--caption text-blue">Total</p>
                                 <h3 class="miniStats--title h4">Pendapatan</h3>
-                                <p class="miniStats--num text-blue">Rp 1.000.000</p>
+                                <p class="miniStats--num text-blue">
+                                    Rp <%- new Intl.NumberFormat('de-DE').format(balance); %></p>
                             </div>
                         </div>
                     </div>
@@ -60,7 +61,7 @@
 
                                 <p class="miniStats--caption text-orange">Total</p>
                                 <h3 class="miniStats--title h4">Tim Aktif</h3>
-                                <p class="miniStats--num text-orange">23</p>
+                                <p class="miniStats--num text-orange"><%- active; %></p>
                             </div>
                         </div>
                     </div>
@@ -76,7 +77,7 @@
                                 <i class="miniStats--icon fa fa-users text-green"></i>
                                 <p class="miniStats--caption text-green">Total</p>
                                 <h3 class="miniStats--title h4">Semua Tim</h3>
-                                <p class="miniStats--num text-green">132</p>
+                                <p class="miniStats--num text-green"><%- count; %></p>
                             </div>
                         </div>
                     </div>
@@ -100,42 +101,30 @@
                                         <th>No Telepon</th>
                                         <th>Kategori</th>
                                         <th>Ide Tim</th>
+                                        <th>Status Pembayaran</th>
                                         <th>Status</th>
+                                        <th>Detail</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <!-- Table Row Start -->
-                                    <tr>
-                                        <td>SEMICOLON TEAM</td>
-                                        <td>iaarn@sssfesf.com</td>
-                                        <td>082193393939</td>
-                                        <td>MHS</td>
-                                        <td>Sistem Manajemen Coffee Shop</td>
-                                        <td><span class="label label-success">Aktif</span></td>
-                                    </tr>
-                                    <!-- Table Row End -->
-
-                                    <!-- Table Row Start -->
-                                    <tr>
-                                        <td>SEMICOLON TEAM</td>
-                                        <td>iaarn@sssfesf.com</td>
-                                        <td>082193393939</td>
-                                        <td>MHS</td>
-                                        <td>Sistem Manajemen Coffee Shop</td>
-                                        <td><span class="label label-success">Aktif</span></td>
-                                    </tr>
-                                    <!-- Table Row End -->
-
-                                    <!-- Table Row Start -->
-                                    <tr>
-                                        <td>SEMICOLON TEAM</td>
-                                        <td>iaarn@sssfesf.com</td>
-                                        <td>082193393939</td>
-                                        <td>MHS</td>
-                                        <td>Sistem Manajemen Coffee Shop</td>
-                                        <td><span class="label label-danger">Non-aktif</span></td>
-                                    </tr>
-                                    <!-- Table Row End -->
+                                    <% team.map((item) => { %>
+                                        <!-- Table Row Start -->
+                                        <tr>
+                                            <td><%- item.name; %></td>
+                                            <td><%- item.email; %></td>
+                                            <td><%- item.phone; %></td>
+                                            <td><%- item.category; %></td>
+                                            <td><%- item.idea.title; %></td>
+                                            <td>
+                                                <span class="label label-<%- item.payment.status ? 'success' : 'danger'; %>"><%- item.payment.status ? 'PAID' : 'UNPAID'; %></span>
+                                            </td>
+                                            <td>
+                                                <span class="label label-<%- item.status ? 'success' : 'danger'; %>"><%- item.status ? 'Aktif' : 'Non-Aktif'; %></span>
+                                            </td>
+                                            <td><a href='/team/<%- item._id; %>'><i class='fa fa-edit'></i></a></td>
+                                        </tr>
+                                        <!-- Table Row End -->
+                                    <% }); %>
                                     </tbody>
                                 </table>
                             </div>

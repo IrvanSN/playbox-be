@@ -149,7 +149,8 @@ const teamSchema = new mongoose.Schema(
         type: String,
       },
       status: {
-        type: String,
+        type: Boolean,
+        default: false,
       },
     },
   },
