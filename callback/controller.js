@@ -2,10 +2,11 @@ const Team = require('../app/team/model');
 
 module.exports = {
   notify: async (req, res) => {
+    const { _id } = req.params;
     const { reference_id, status, sid, via } = req.body;
     const updatedStatus = status === 'berhasil';
 
-    Team.findById(reference_id)
+    Team.findById(_id)
       .then((r) => {
         if (r.paymentSessionId !== sid) {
           return res.status(500).json({ error: true });

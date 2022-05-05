@@ -60,7 +60,7 @@ const teamSchema = new mongoose.Schema(
       },
       profile_image: {
         type: String,
-        default: '',
+        default: `${process.env.IMG_URL}/avatar.png`,
       },
       role: {
         type: String,
@@ -89,7 +89,7 @@ const teamSchema = new mongoose.Schema(
       },
       profile_image: {
         type: String,
-        default: '',
+        default: `${process.env.IMG_URL}/avatar.png`,
       },
       role: {
         type: String,
@@ -118,7 +118,7 @@ const teamSchema = new mongoose.Schema(
       },
       profile_image: {
         type: String,
-        default: '',
+        default: `${process.env.IMG_URL}/avatar.png`,
       },
       role: {
         type: String,

@@ -237,12 +237,11 @@ module.exports = {
       price: [category === 'MHS' ? 20000 : category === 'SMA' ? 15000 : ''],
       returnUrl: 'https://playbox.coderitts.tech/payment/success',
       cancelUrl: 'https://playbox.coderitts.tech/payment/failed',
-      notifyUrl: process.env.NOTIFY_URL_IPAYMU,
+      notifyUrl: `${process.env.NOTIFY_URL_IPAYMU}/${_id}`,
       buyerName: name,
       buyerEmail: email,
       buyerPhone: phone,
       referenceId: _id,
-      paymentMethod: 'va',
       expired: 24,
     };
 
