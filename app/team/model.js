@@ -1,24 +1,34 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const validator = require('validator');
 
 const teamSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, 'Name is required!'],
     },
     email: {
       type: String,
-      unique: true,
-      required: true,
+      validate: {
+        validator: (value) => validator.isEmail(value),
+        message: 'Email is not a valid email address! ex: foo@bar.com',
+      },
+      unique: [true, 'Email is already registered!'],
+      required: [true, 'Email is required!'],
     },
     phone: {
       type: String,
-      required: true,
+      validate: {
+        validator: (value) => validator.isMobilePhone(value, ['id-ID']),
+        message: 'Phone number is not valid, ex 08xxxx or 62xxxx',
+      },
+      required: [true, 'Phone number is required!'],
     },
     password: {
       type: String,
-      required: true,
+      minLength: [6, 'Password less than 6 characters!'],
+      required: [true, 'Password is required'],
     },
     category: {
       type: String,

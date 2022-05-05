@@ -46,7 +46,6 @@ const upload = multer({
 module.exports = {
   signin: async (req, res) => {
     const { email, password } = req.body;
-    const tokenExpires = 3 * 24 * 60 * 60;
 
     await Team.login(email, password)
       .then((r) => {
@@ -61,7 +60,7 @@ module.exports = {
             },
           },
           process.env.JWT_KEY,
-          { expiresIn: tokenExpires }
+          { expiresIn: '24h' }
         );
 
         res.status(200).json({ error: false, data: { token } });
