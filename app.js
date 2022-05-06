@@ -16,13 +16,14 @@ mongoose.connect(
       throw e;
     }
     console.log('Connected to database!');
-  }
+  },
 );
 
 const apiRouter = require('./api/routes');
 const callbackRouter = require('./callback/routes');
 const homeRouter = require('./app/home/routes');
 const authRouter = require('./app/auth/routes');
+const teamRouter = require('./app/team/routes');
 
 const app = express();
 app.use(cors());
@@ -43,6 +44,7 @@ app.use('/api', apiRouter);
 app.use('/cb', callbackRouter);
 app.use('/', homeRouter);
 app.use('/auth', authRouter);
+app.use('/team', teamRouter);
 
 app.use((req, res, next) => {
   next(createError(404));

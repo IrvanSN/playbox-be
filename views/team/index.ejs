@@ -1,0 +1,372 @@
+<%- include('../parts/header.ejs') %>
+<body>
+
+<!-- Wrapper Start -->
+<div class="wrapper">
+    <!-- Navbar -->
+    <%- include('../parts/navbar.ejs') %>
+
+    <!-- Sidebar Start -->
+    <%- include('../parts/sidebar.ejs') %>
+
+    <!-- Main Container Start -->
+    <main class="main--container">
+        <!-- Page Header Start -->
+        <section class="page--header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <!-- Page Title Start -->
+                        <h2 class="page--title h5">Detail Tim</h2>
+                        <!-- Page Title End -->
+
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/team">Team</a></li>
+                            <li class="breadcrumb-item active"><a href="/team/<%- team._id %>"><%- team.name %></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Page Header End -->
+
+        <!-- Main Content Start -->
+        <section class="main--content">
+            <div class="row gutter-20">
+                <div class='col-lg-12'>
+                    <div class="panel">
+                        <!-- Records Header Start -->
+                        <div class="records--header">
+                            <div class="title fa-users">
+                                <h3 class="h3"><%- team.name %></h3>
+                            </div>
+                        </div>
+                        <!-- Records Header End -->
+                    </div>
+                </div>
+                <div class='col-lg-12'>
+                    <div class="panel">
+                        <div class="panel-heading text-center">
+                            <h3 class="panel-title float-none ">IDE TIM</h3>
+                        </div>
+
+                        <div class="panel-content panel-about text-center">
+                            <table>
+                                <tr>
+                                    <td><%- team.idea.title %></td>
+                                </tr>
+                                <tr>
+                                    <td><%- team.idea.description %></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-lg-6'>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Kontak</h3>
+                        </div>
+
+                        <div class="panel-content panel-about">
+                            <table>
+                                <tr>
+                                    <th>Nama</th>
+                                    <td><%- team.name %></td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td><%- team.email %></td>
+                                </tr>
+                                <tr>
+                                    <th>No HP</th>
+                                    <td><%- team.phone %></td>
+                                </tr>
+                                <tr>
+                                    <th>Kategori</th>
+                                    <td><%- team.category %></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-lg-6'>
+                    <div class="panel">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Detail Pembayaran</h3>
+                        </div>
+
+                        <div class="panel-content panel-about">
+                            <table>
+                                <tr>
+                                    <th>Payment SessionID</th>
+                                    <td><%- team.payment.sessionId ? team.payment.sessionId : '' %></td>
+                                </tr>
+                                <tr>
+                                    <th>Status Pembayaran</th>
+                                    <td><%- team.payment.status ? 'PAID' : 'UNPAID' %></td>
+                                </tr>
+                                <tr>
+                                    <th>Via</th>
+                                    <td><%- team.payment.via ? team.payment.via : '' %></td>
+                                </tr>
+                                <tr>
+                                    <th>Total yang dibayar</th>
+                                    <td><%- team.payment.total ? `Rp ${new Intl.NumberFormat('de-DE').format(team.payment.total)}` : '' %></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class='col-lg-12'>
+                    <div class="panel">
+
+                        <!-- Edit Product Start -->
+                        <div class="records--body">
+                            <div class="title">
+                                <h6 class="h6">Anggota Tim <%- team.name %></h6>
+                            </div>
+
+                            <!-- Tabs Nav Start -->
+                            <ul class="nav nav-tabs">
+                                <li class="nav-item">
+                                    <a href="#tab01" data-toggle="tab" class="nav-link active">Anggota 1</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#tab02" data-toggle="tab" class="nav-link">Anggota 2</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#tab03" data-toggle="tab" class="nav-link">Anggota 3</a>
+                                </li>
+                            </ul>
+                            <!-- Tabs Nav End -->
+
+                            <!-- Tab Content Start -->
+                            <div class="tab-content">
+                                <!-- Tab Pane Start -->
+                                <div class="tab-pane fade show active" id="tab01">
+                                    <form action="#">
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Role</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_one.role %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Nama</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_one.name %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Email</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_one.email %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Institusi</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text"
+                                                       value='<%- team.member_one.institution %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">No. HP</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_one.phone %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Foto Kartu Identitas</span>
+
+                                            <div class="col-md-9">
+                                                <img class='rounded' src='<%- team.member_one.id_image %>' alt=''>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- Tab Pane End -->
+
+                                <!-- Tab Pane Start -->
+                                <div class="tab-pane fade show" id="tab02">
+                                    <form action="#">
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Role</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_two.role %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Nama</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_two.name %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Email</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_two.email %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Institusi</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text"
+                                                       value='<%- team.member_two.institution %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">No. HP</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_two.phone %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Foto Kartu Identitas</span>
+
+                                            <div class="col-md-9">
+                                                <img class='rounded' src='<%- team.member_two.id_image %>' alt=''>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- Tab Pane End -->
+
+                                <!-- Tab Pane Start -->
+                                <div class="tab-pane fade show" id="tab03">
+                                    <form action="#">
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Role</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_three.role %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Nama</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_three.name %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Email</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_three.email %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Institusi</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text"
+                                                       value='<%- team.member_three.institution %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">No. HP</span>
+
+                                            <div class="col-md-9">
+                                                <input type="text" name="text" value='<%- team.member_three.phone %>'
+                                                       class="form-control" disabled>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <span class="label-text col-md-3 col-form-label">Foto Kartu Identitas</span>
+
+                                            <div class="col-md-9">
+                                                <img class='rounded' src='<%- team.member_three.id_image %>' alt=''>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <!-- Tab Pane End -->
+                            </div>
+                            <!-- Tab Content End -->
+                        </div>
+                    </div>
+                </div>
+                <div class='col-lg-12'>
+                    <div class="panel">
+                        <div class="panel-heading text-center">
+                            <h3 class="panel-title float-none ">ACTION</h3>
+                        </div>
+
+                        <div class="panel-content panel-about text-center">
+                            <div class="row gutter-20">
+                                <div class='col-lg-6'>
+                                    <form method='post' action='/team/<%- team._id %>/update'>
+                                        <input type='text' name='status' value='true' hidden>
+                                        <button type='submit'
+                                                class="btn btn-rounded btn-success">
+                                            Aktifkan Akun ini
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class='col-lg-6'>
+                                    <form method='post' action='/team/<%- team._id %>/update'>
+                                        <input type='text' name='status' value='false' hidden>
+                                        <button type='submit'
+                                                class="btn btn-rounded btn-danger">
+                                            non-Aktifkan Akun ini
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Edit Product End -->
+            </div>
+        </section>
+        <!-- Main Content End -->
+
+        <%- include('../parts/main-footer.ejs') %>
+    </main>
+    <!-- Main Container End -->
+</div>
+<!-- Wrapper End -->
+
+<!-- Scripts -->
+<%- include('../parts/scripts') %>
