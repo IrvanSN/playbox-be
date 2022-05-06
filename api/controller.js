@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
+const moment = require('moment');
 const Team = require('../app/team/model');
-const { callAPI } = require('../config/ipaymu');
+const { callAPI, generateProduct } = require('../config/ipaymu');
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -146,7 +147,6 @@ module.exports = {
 
       const payload = {
         category,
-        status: category === 'INT',
         member_one: {
           name: memberOneName,
           role: memberOneRole,
@@ -188,7 +188,7 @@ module.exports = {
         },
       };
 
-      Team.findByIdAndUpdate(_id, payload)
+      return Team.findByIdAndUpdate(_id, payload)
         .then(() => res
           .status(200)
           .json({ error: false, message: 'Berhasil update biodata tim' }))
@@ -230,21 +230,13 @@ module.exports = {
           });
         }
 
+        const product = generateProduct(moment().add(10, 'd').format(), r.category);
+
         const body = {
           account: process.env.VA_IPAYMU,
-          product: [
-            `Pendaftaran Playbox Season 3 Kategori ${
-              r.category === 'MHS'
-                ? 'Mahasiswa'
-                : r.category === 'SMA'
-                  ? 'SMA/SMK'
-                  : ''
-            }`,
-          ],
+          product: [product.title],
           qty: ['1'],
-          price: [
-            r.category === 'MHS' ? 20000 : r.category === 'SMA' ? 15000 : '',
-          ],
+          price: [product.price],
           returnUrl: 'https://playbox.coderitts.tech/payment/success',
           cancelUrl: 'https://playbox.coderitts.tech/payment/failed',
           notifyUrl: `${process.env.NOTIFY_URL_IPAYMU}/${r._id}`,
@@ -265,8 +257,8 @@ module.exports = {
           return res.status(500).json(payload);
         }
 
-        await Team.findByIdAndUpdate(_id, {
-          payment: { sessionId: payment.Data.SessionID },
+        return Team.findByIdAndUpdate(_id, {
+          payment: { status: false, sessionId: payment.Data.SessionID },
         })
           .then(() => {
             const payload = {
@@ -288,7 +280,7 @@ module.exports = {
             return res.status(500).json(payload);
           });
       })
-      .catch((e) => {
+      .catch(() => {
         res.status(500).json({
           error: true,
           message: 'Akun anda tidak ditemukan!',
