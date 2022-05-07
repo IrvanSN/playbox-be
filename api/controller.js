@@ -207,12 +207,22 @@ module.exports = {
   },
   teamPayment: async (req, res) => {
     const { _id } = req.team;
+    const { paymentMethod } = req.query;
 
     await Team.findById(_id)
       .then(async (r) => {
+        if (r.category === '') {
+          return res.status(500).json({
+            error: true,
+            status: 5004,
+            message: 'Kategori masih kosong, silahkan update data anda!',
+          });
+        }
+
         if (!r.status) {
           return res.status(500).json({
             error: true,
+            status: 5001,
             message: 'Akun belum di setujui oleh admin!',
           });
         }
@@ -220,14 +230,21 @@ module.exports = {
         if (r.payment.status) {
           return res
             .status(500)
-            .json({ error: true, message: 'Sudah melakukan pembayaran!' });
+            .json({
+              error: true,
+              status: 5002,
+              message: 'Anda sudah melakukan pembayaran!',
+            });
         }
 
-        if (r.category === '') {
-          return res.status(500).json({
-            error: true,
-            message: 'Kategori masih kosong, silahkan update data anda!',
-          });
+        if (r.payment.sessionId) {
+          return res
+            .status(500)
+            .json({
+              error: true,
+              status: 5003,
+              message: `Anda sudah melakukan request pembayaran, silahkan cek email anda atau kunjungi https://my.ipaymu.com/payment/${r.payment.sessionId} untuk melakukan pembayaran!`,
+            });
         }
 
         const product = generateProduct(moment().add(10, 'd').format(), r.category);
@@ -244,6 +261,7 @@ module.exports = {
           buyerEmail: r.email,
           buyerPhone: r.phone,
           referenceId: r._id,
+          paymentMethod,
           expired: 24,
         };
 
@@ -252,6 +270,7 @@ module.exports = {
         if (payment.Status !== 200) {
           const payload = {
             error: true,
+            status: 5005,
             message: payment.Message,
           };
           return res.status(500).json(payload);
@@ -274,6 +293,7 @@ module.exports = {
           .catch(() => {
             const payload = {
               error: true,
+              status: 5000,
               message: 'Akun anda tidak ditemukan!',
             };
 
@@ -283,6 +303,7 @@ module.exports = {
       .catch(() => {
         res.status(500).json({
           error: true,
+          status: 5000,
           message: 'Akun anda tidak ditemukan!',
         });
       });
