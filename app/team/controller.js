@@ -6,6 +6,7 @@ module.exports = {
 
     if (status === 'active') {
       Team.find({ status: true })
+        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const count = r.length;
 
@@ -15,20 +16,22 @@ module.exports = {
         });
     } else if (status === 'inactive') {
       Team.find({ status: false })
+        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const count = r.length;
 
           return res.render('team/index.ejs', {
-            title: 'Tim Aktif - PLAYBOX Season 3', team: r, status, count,
+            title: 'Tim Non-Aktif - PLAYBOX Season 3', team: r, status, count,
           });
         });
     } else {
       Team.find({})
+        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const count = r.length;
 
           return res.render('team/index.ejs', {
-            title: 'Tim Aktif - PLAYBOX Season 3', team: r, status, count,
+            title: 'Semua Tim - PLAYBOX Season 3', team: r, status, count,
           });
         });
     }
@@ -38,7 +41,7 @@ module.exports = {
 
     await Team.findById(id)
       .then((r) => {
-        res.render('team/view-detail.ejs', { title: `${r.name} - PLAYBOX Season 3`, team: r });
+        res.render('team/view-detail.ejs', { title: `${r.name} - PLAYBOX Season 3`, team: r, status: undefined });
       }).catch(() => {
         res.redirect('/');
       });
@@ -60,11 +63,10 @@ module.exports = {
 
     Team.find({ name: { $regex: regex, $options: 'i' } })
       .then((r) => {
-        console.log(r);
         const count = r.length;
 
         return res.render('team/index.ejs', {
-          title: 'Tim Aktif - PLAYBOX Season 3', team: r, status: 'search', count,
+          title: 'Cari Tim - PLAYBOX Season 3', team: r, status: 'search', count,
         });
       });
   },

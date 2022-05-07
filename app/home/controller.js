@@ -4,7 +4,7 @@ const { callAPI } = require('../../config/ipaymu');
 module.exports = {
   index: async (req, res) => {
     await Team.find({})
-      .select('name email phone category status idea.title payment.status')
+      .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
       .limit(10)
       .sort({ createdAt: 'descending' })
       .then(async (r) => {

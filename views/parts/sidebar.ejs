@@ -6,7 +6,7 @@
         <ul>
             <li>
                 <ul>
-                    <li class="active">
+                    <li class="<%- isActive === 'home-page' ? 'active' : ''; %>">
                         <a href="/">
                             <i class="fa fa-home"></i>
                             <span>Home</span>
@@ -25,9 +25,14 @@
                         </a>
 
                         <ul>
-                            <li><a href="/team">Semua Tim</a></li>
-                            <li><a href="/team?status=active">Tim Aktif</a></li>
-                            <li><a href="/team?status=inactive">Tim Non-aktif</a></li>
+                            <li class='<%- isActive === 'all-team' ? 'active' : ''; %>'><a href="/team">Semua Tim</a>
+                            </li>
+                            <li class='<%- isActive === 'active-team' ? 'active' : ''; %>'><a
+                                        href="/team?status=active">Tim
+                                    Aktif</a></li>
+                            <li class='<%- isActive === 'inactive-team' ? 'active' : ''; %>'><a
+                                        href="/team?status=inactive">Tim
+                                    Non-aktif</a></li>
                         </ul>
                     </li>
                 </ul>

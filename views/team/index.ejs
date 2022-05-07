@@ -7,7 +7,7 @@
     <%- include('../parts/navbar.ejs') %>
 
     <!-- Sidebar Start -->
-    <%- include('../parts/sidebar.ejs') %>
+    <%- include('../parts/sidebar.ejs', {isActive: status === 'active' ? 'active-team' : status === 'inactive' ? 'inactive-team' : 'all-team'}) %>
 
     <!-- Main Container Start -->
     <main class="main--container">
@@ -76,26 +76,29 @@
                             <th>Email</th>
                             <th>No Telepon</th>
                             <th>Kategori</th>
-                            <th>Ide Tim</th>
-                            <th>Status Pembayaran</th>
+                            <th>Approval</th>
                             <th>Status</th>
+                            <th>Pembayaran</th>
                             <th>Detail</th>
                         </tr>
                         </thead>
                         <tbody>
                         <% team.map((item) => { %>
+                            <% const isReadyApproval = item.member_one.id_image && item.member_two.id_image && item.member_three.id_image; %>
                             <!-- Table Row Start -->
                             <tr>
                                 <td><%- item.name; %></td>
                                 <td><%- item.email; %></td>
                                 <td><%- item.phone; %></td>
                                 <td><%- item.category; %></td>
-                                <td><%- item.idea.title; %></td>
                                 <td>
-                                    <span class="label label-<%- item.payment.status ? 'success' : 'danger'; %>"><%- item.payment.status ? 'PAID' : 'UNPAID'; %></span>
+                                    <span class="label label-<%- isReadyApproval ? 'success' : 'danger'; %>"><%- isReadyApproval ? 'READY' : 'NOT-READY'; %></span>
                                 </td>
                                 <td>
                                     <span class="label label-<%- item.status ? 'success' : 'danger'; %>"><%- item.status ? 'Aktif' : 'Non-Aktif'; %></span>
+                                </td>
+                                <td>
+                                    <span class="label label-<%- item.payment.status ? 'success' : 'danger'; %>"><%- item.payment.status ? 'PAID' : 'UNPAID'; %></span>
                                 </td>
                                 <td><a href='/team/<%- item._id; %>'><i class='fa fa-edit'></i></a></td>
                             </tr>

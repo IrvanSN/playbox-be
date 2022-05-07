@@ -7,7 +7,7 @@
     <%- include('../parts/navbar.ejs') %>
 
     <!-- Sidebar Start -->
-    <%- include('../parts/sidebar.ejs') %>
+    <%- include('../parts/sidebar.ejs', { isActive: 'all-team' }) %>
 
     <!-- Main Container Start -->
     <main class="main--container">
@@ -22,7 +22,8 @@
 
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/team">Team</a></li>
-                            <li class="breadcrumb-item active"><a href="/team/<%- team._id; %>"><%- team.name; %></a></li>
+                            <li class="breadcrumb-item active"><a href="/team/<%- team._id; %>"><%- team.name; %></a>
+                            </li>
                         </ul>
                     </div>
                 </div>
