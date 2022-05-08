@@ -38,7 +38,7 @@ module.exports = {
       }
       if (category === 'SMA') {
         return {
-          title: 'Pendaftaran Playbox Season 3 Early Bird Kategori SMA/SMK dengan diskon Early Bird',
+          title: 'Pendaftaran Playbox Season 3 Early Bird Kategori SMA/SMK',
           price: 30000 + fee,
         };
       }

@@ -38,15 +38,14 @@ module.exports = {
 
           next();
         })
-        .catch((e) =>
-          res.status(500).json({
-            error: true,
-            message: 'Data tim tidak ditemukan atau token tidak valid!',
-          })
-        );
+        .catch((e) => res.status(500).json({
+          error: true,
+          message: 'Data tim tidak ditemukan atau token tidak valid!',
+        }));
     } catch (err) {
       return res.status(500).json({
         error: true,
+        status: 4000,
         message: 'Not authorized to access this resource!',
       });
     }

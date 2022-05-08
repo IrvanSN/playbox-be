@@ -211,13 +211,13 @@ module.exports = {
 
     await Team.findById(_id)
       .then(async (r) => {
-        if (!paymentMethod) {
-          return res.status(500).json({
-            error: true,
-            status: 5000,
-            message: 'Silahkan pilih metode pembayaran!',
-          });
-        }
+        // if (!paymentMethod) {
+        //   return res.status(500).json({
+        //     error: true,
+        //     status: 5000,
+        //     message: 'Silahkan pilih metode pembayaran!',
+        //   });
+        // }
 
         if (r.category === '') {
           return res.status(500).json({
@@ -255,7 +255,17 @@ module.exports = {
             });
         }
 
-        const product = generateProduct(moment().add(10, 'd').format(), r.category);
+        const product = generateProduct(moment().add(1, 'd').format(), r.category);
+
+        if (!product) {
+          return res
+            .status(500)
+            .json({
+              error: true,
+              status: 5005,
+              message: 'Registrasi ditutup!',
+            });
+        }
 
         const body = {
           account: process.env.VA_IPAYMU,
@@ -269,7 +279,7 @@ module.exports = {
           buyerEmail: r.email,
           buyerPhone: r.phone,
           referenceId: r._id,
-          paymentMethod,
+          // paymentMethod,
           expired: 24,
         };
 
