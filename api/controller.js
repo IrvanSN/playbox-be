@@ -213,17 +213,17 @@ module.exports = {
   },
   teamPayment: async (req, res) => {
     const { _id } = req.team;
-    const { paymentMethod } = req.query;
+    // const { paymentMethod } = req.query;
 
     await Team.findById(_id)
       .then(async (r) => {
-        if (!paymentMethod) {
-          return res.status(500).json({
-            error: true,
-            status: 5000,
-            message: 'Silahkan pilih metode pembayaran!',
-          });
-        }
+        // if (!paymentMethod) {
+        //   return res.status(500).json({
+        //     error: true,
+        //     status: 5000,
+        //     message: 'Silahkan pilih metode pembayaran!',
+        //   });
+        // }
 
         if (r.category === '') {
           return res.status(500).json({
@@ -275,7 +275,7 @@ module.exports = {
           buyerEmail: r.email,
           buyerPhone: r.phone,
           referenceId: r._id,
-          paymentMethod,
+          // paymentMethod,
           expired: 1,
         };
 
