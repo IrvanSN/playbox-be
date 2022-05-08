@@ -7,6 +7,8 @@ module.exports = {
       reference_id, status, sid, via, total, trx_id,
     } = req.body;
 
+    console.log(req.body);
+
     Team.findById(_id)
       .then((r) => {
         if (r.payment.sessionId !== sid) {
