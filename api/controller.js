@@ -211,6 +211,14 @@ module.exports = {
 
     await Team.findById(_id)
       .then(async (r) => {
+        if (!paymentMethod) {
+          return res.status(500).json({
+            error: true,
+            status: 5000,
+            message: 'Silahkan pilih metode pembayaran!',
+          });
+        }
+
         if (r.category === '') {
           return res.status(500).json({
             error: true,
