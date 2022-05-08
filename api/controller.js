@@ -250,7 +250,7 @@ module.exports = {
             });
         }
 
-        const product = generateProduct(moment().add(1, 'd').format(), r.category);
+        const product = generateProduct(moment().format(), r.category);
 
         if (!product) {
           return res
@@ -267,14 +267,14 @@ module.exports = {
           product: [product.title],
           qty: ['1'],
           price: [product.price],
-          returnUrl: 'https://playbox.coderitts.tech/payment/success',
-          cancelUrl: 'https://playbox.coderitts.tech/payment/failed',
+          returnUrl: 'https://plbx.coderitts.tech/#pembayaran',
+          cancelUrl: 'https://plbx.coderitts.tech/#pembayaran',
           notifyUrl: `${process.env.NOTIFY_URL_IPAYMU}/${r._id}`,
           buyerName: r.name,
           buyerEmail: r.email,
           buyerPhone: r.phone,
           referenceId: r._id,
-          paymentMethod,
+          // paymentMethod,
           expired: 1,
         };
 
