@@ -139,6 +139,9 @@ const teamSchema = new mongoose.Schema(
       type: String,
     },
     payment: {
+      transactionId: {
+        type: String,
+      },
       sessionId: {
         type: String,
       },
@@ -156,7 +159,7 @@ const teamSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 teamSchema.pre('save', async function (next) {

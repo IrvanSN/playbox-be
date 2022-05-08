@@ -4,8 +4,10 @@ module.exports = {
   notify: async (req, res) => {
     const { _id } = req.params;
     const {
-      reference_id, status, sid, via, total,
+      reference_id, status, sid, via, total, trx_id,
     } = req.body;
+
+    console.log(req.body);
 
     Team.findById(_id)
       .then((r) => {
@@ -15,6 +17,7 @@ module.exports = {
 
         Team.findByIdAndUpdate(reference_id, {
           payment: {
+            transactionId: trx_id,
             sessionId: r.payment.sessionId,
             status: status === 'berhasil',
             via,

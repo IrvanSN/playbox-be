@@ -253,11 +253,13 @@ module.exports = {
 
         if (r.payment.sessionId) {
           return res
-            .status(500)
+            .status(200)
             .json({
-              error: true,
-              status: 5003,
-              message: `Anda sudah melakukan request pembayaran, silahkan cek email anda atau kunjungi https://my.ipaymu.com/payment/${r.payment.sessionId} untuk melakukan pembayaran!`,
+              error: false,
+              data: {
+                url: `https://my.ipaymu.com/payment/${r.payment.sessionId}`,
+                sessionId: r.payment.sessionId,
+              },
             });
         }
 
@@ -286,7 +288,7 @@ module.exports = {
           buyerPhone: r.phone,
           referenceId: r._id,
           paymentMethod,
-          expired: 24,
+          expired: 1,
         };
 
         const payment = await callAPI(body, 'POST', `${process.env.API_URL_IPAYMU}/payment`);
