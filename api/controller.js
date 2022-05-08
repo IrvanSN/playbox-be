@@ -75,7 +75,9 @@ module.exports = {
 
     await Team.findById(id)
       .then((r) => {
-        res.status(200).json({ error: false, data: r });
+        const product = generateProduct(moment().add(1, 'd').format(), r.category);
+
+        res.status(200).json({ error: false, data: r, product });
       })
       .catch((e) => {
         res.status(500).json({ error: true, data: e.message });
@@ -191,7 +193,11 @@ module.exports = {
       return Team.findByIdAndUpdate(_id, payload)
         .then(() => res
           .status(200)
-          .json({ error: false, message: 'Berhasil update biodata tim' }))
+          .json({
+            error: false,
+            message: 'Berhasil update biodata tim',
+            data: {},
+          }))
         .catch((e) => res.status(500).json({ error: false, message: e.message }));
     });
   },
