@@ -196,7 +196,6 @@ module.exports = {
           .json({
             error: false,
             message: 'Berhasil update biodata tim',
-            data: {},
           }))
         .catch((e) => res.status(500).json({ error: false, message: e.message }));
     });
