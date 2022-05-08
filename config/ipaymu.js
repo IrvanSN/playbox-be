@@ -22,10 +22,7 @@ module.exports = {
         timestamps: new Date().getTime(),
       },
       data: bodyStringify,
-    }).then((r) => r.data).catch((e) => {
-      console.log(e);
-      e.response.data;
-    });
+    }).then((r) => r.data).catch((e) => e.response.data);
   },
   generateProduct: (date, category) => {
     const earlyBird = moment(date).isBetween('2022-05-09', '2022-05-22');

@@ -251,18 +251,6 @@ module.exports = {
             });
         }
 
-        if (r.payment.sessionId) {
-          return res
-            .status(200)
-            .json({
-              error: false,
-              data: {
-                url: `https://my.ipaymu.com/payment/${r.payment.sessionId}`,
-                sessionId: r.payment.sessionId,
-              },
-            });
-        }
-
         const product = generateProduct(moment().add(1, 'd').format(), r.category);
 
         if (!product) {
