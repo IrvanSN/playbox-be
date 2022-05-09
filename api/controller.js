@@ -149,6 +149,9 @@ module.exports = {
 
       const payload = {
         category,
+        payment: {
+          status: category === 'INT',
+        },
         member_one: {
           name: memberOneName,
           role: memberOneRole,
