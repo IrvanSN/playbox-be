@@ -15,21 +15,23 @@ module.exports = {
           return res.status(500).json({ error: true });
         }
 
-        Team.findByIdAndUpdate(reference_id, {
-          payment: {
-            transactionId: trx_id,
-            sessionId: r.payment.sessionId,
-            status: status === 'berhasil',
-            via,
-            total: parseInt(total, 10),
-          },
-        })
-          .then(() => res.status(200).json({
-            error: false,
-          }))
-          .catch(() => res.status(500).json({
-            error: true,
-          }));
+        if (status === 'berhasil') {
+          Team.findByIdAndUpdate(reference_id, {
+            payment: {
+              transactionId: trx_id,
+              sessionId: r.payment.sessionId,
+              status: status === 'berhasil',
+              via,
+              total: parseInt(total, 10),
+            },
+          })
+            .then(() => res.status(200).json({
+              error: false,
+            }))
+            .catch(() => res.status(500).json({
+              error: true,
+            }));
+        }
       })
       .catch(() => res.status(500).json({ error: true }));
   },
