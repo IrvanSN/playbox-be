@@ -277,7 +277,7 @@ module.exports = {
           buyerEmail: r.email,
           buyerPhone: r.phone,
           referenceId: r._id,
-          // paymentMethod,
+          paymentMethod,
           expired: 1,
         };
 
