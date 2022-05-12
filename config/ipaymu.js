@@ -58,3 +58,46 @@ module.exports = {
     }
   },
 };
+
+//   EXAMPLE IPAYMU CALLBACK
+
+//   0|playbox-be  | [Object: null prototype] {
+//   0|playbox-be  |   trx_id: '8184314',
+//   0|playbox-be  |   status: 'pending',
+//   0|playbox-be  |   status_code: '0',
+//   0|playbox-be  |   via: 'va',
+//   0|playbox-be  |   channel: 'permata',
+//   0|playbox-be  |   sid: '93ABA96C-761E-4B53-8B1D-E3F2CBDB66E2',
+//   0|playbox-be  |   virtual_account: '727004000244918',
+//   0|playbox-be  |   va: '727004000244918',
+//   0|playbox-be  |   displayName: 'iPaymu PLAYBOX',
+//   0|playbox-be  |   buyer_name: 'Farnest',
+//   0|playbox-be  |   buyer_email: 'fauqi@farnest.xyz',
+//   0|playbox-be  |   buyer_phone: '082151307040',
+//   0|playbox-be  |   reference_id: '627b99a3b7985f26bcddb1c3',
+//   0|playbox-be  |   total: '35000',
+//   0|playbox-be  |   fee: '3500',
+//   0|playbox-be  |   expired_at: '2022-05-12 21:56:03',
+//   0|playbox-be  |   url: 'https://playbox.erpn.us/cb/notify/627b99a3b7985f26bcddb1c3'
+//   0|playbox-be  | }
+//   0|playbox-be  | POST /cb/notify/627b99a3b7985f26bcddb1c3 - - ms - -
+//   0|playbox-be  | [Object: null prototype] {
+//   0|playbox-be  |   trx_id: '8184314',
+//   0|playbox-be  |   sid: '93ABA96C-761E-4B53-8B1D-E3F2CBDB66E2',
+//   0|playbox-be  |   reference_id: '627b99a3b7985f26bcddb1c3',
+//   0|playbox-be  |   status: 'berhasil',
+//   0|playbox-be  |   status_code: '1',
+//   0|playbox-be  |   via: 'va',
+//   0|playbox-be  |   channel: 'permata',
+//   0|playbox-be  |   va: '727004000244918',
+//   0|playbox-be  |   buyer_name: 'Farnest',
+//   0|playbox-be  |   buyer_email: 'fauqi@farnest.xyz',
+//   0|playbox-be  |   buyer_phone: '082151307040',
+//   0|playbox-be  |   total: '35000',
+//   0|playbox-be  |   fee: '3500',
+//   0|playbox-be  |   expired_at: '2022-05-12 21:56:03',
+//   0|playbox-be  |   paid_at: '2022-05-12 20:59:04',
+//   0|playbox-be  |   is_escrow: '0',
+//   0|playbox-be  |   url: 'https://playbox.erpn.us/cb/notify/627b99a3b7985f26bcddb1c3'
+//   0|playbox-be  | }
+//   0|playbox-be  | POST /cb/notify/627b99a3b7985f26bcddb1c3 200 45.648 ms - 15

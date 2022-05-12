@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 const moment = require('moment');
+const axios = require('axios');
 const Team = require('../app/team/model');
 const { callAPI, generateProduct } = require('../config/ipaymu');
 
@@ -113,7 +114,7 @@ module.exports = {
     const { _id } = req.team;
     const URL = process.env.IMG_URL;
 
-    upload(req, res, (err) => {
+    upload(req, res, async (err) => {
       const {
         category,
         memberOneName,
@@ -192,6 +193,42 @@ module.exports = {
             : req.team.member_three.profile_image,
         },
       };
+
+      if (
+        payload.member_one.id_image
+        && payload.member_two.id_image
+        && payload.member_three.id_image
+      ) {
+        await Team.findById(_id).then(async (team) => {
+          if (!team.status) {
+            await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+              chat_id: 619360171,
+              text: `HALO ADMIN\nAda tim yang minta verifikasi nih, berikut URLnya\nhttps://playbox.erpn.us/team/${team._id}`,
+            }).then(async () => {
+              await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMediaGroup`, {
+                chat_id: 619360171,
+                media: [
+                  {
+                    type: 'photo',
+                    media: payload.member_one.id_image,
+                    caption: payload.member_one.role,
+                  },
+                  {
+                    type: 'photo',
+                    media: payload.member_two.id_image,
+                    caption: payload.member_two.role,
+                  },
+                  {
+                    type: 'photo',
+                    media: payload.member_three.id_image,
+                    caption: payload.member_three.role,
+                  },
+                ],
+              });
+            });
+          }
+        });
+      }
 
       return Team.findByIdAndUpdate(_id, payload)
         .then(() => res
