@@ -114,89 +114,96 @@ module.exports = {
     const { _id } = req.team;
     const URL = process.env.IMG_URL;
 
-    upload(req, res, async (err) => {
-      const {
-        category,
-        memberOneName,
-        memberOneInstitution,
-        memberOnePhone,
-        memberOneRole,
-        memberOneEmail,
-        memberTwoName,
-        memberTwoInstitution,
-        memberTwoPhone,
-        memberTwoRole,
-        memberTwoEmail,
-        memberThreeName,
-        memberThreeInstitution,
-        memberThreePhone,
-        memberThreeRole,
-        memberThreeEmail,
-      } = req.body;
-
-      if (err instanceof multer.MulterError) {
+    Team.findById(_id).then(async (team) => {
+      if (team.status) {
         return res.status(500).json({
           error: true,
-          message: err.message,
+          message: 'Maaf, anda tidak bisa update biodata karena tim anda sudah di setujui oleh admin.',
         });
       }
 
-      if (err) {
-        return res.status(500).json({
-          error: true,
-          message: err.message,
-        });
-      }
+      return upload(req, res, async (err) => {
+        const {
+          category,
+          memberOneName,
+          memberOneInstitution,
+          memberOnePhone,
+          memberOneRole,
+          memberOneEmail,
+          memberTwoName,
+          memberTwoInstitution,
+          memberTwoPhone,
+          memberTwoRole,
+          memberTwoEmail,
+          memberThreeName,
+          memberThreeInstitution,
+          memberThreePhone,
+          memberThreeRole,
+          memberThreeEmail,
+        } = req.body;
 
-      const payload = {
-        category,
-        member_one: {
-          name: memberOneName,
-          role: memberOneRole,
-          email: memberOneEmail,
-          institution: memberOneInstitution,
-          phone: memberOnePhone,
-          id_image: req.files.memberOneIdImage
-            ? `${URL}/${req.files.memberOneIdImage[0].filename}`
-            : req.team.member_one.id_image,
-          profile_image: req.files.memberOneProfileImage
-            ? `${URL}/${req.files.memberOneProfileImage[0].filename}`
-            : req.team.member_one.profile_image,
-        },
-        member_two: {
-          name: memberTwoName,
-          role: memberTwoRole,
-          email: memberTwoEmail,
-          institution: memberTwoInstitution,
-          phone: memberTwoPhone,
-          id_image: req.files.memberTwoIdImage
-            ? `${URL}/${req.files.memberTwoIdImage[0].filename}`
-            : req.team.member_two.id_image,
-          profile_image: req.files.memberTwoProfileImage
-            ? `${URL}/${req.files.memberTwoProfileImage[0].filename}`
-            : req.team.member_two.profile_image,
-        },
-        member_three: {
-          name: memberThreeName,
-          role: memberThreeRole,
-          email: memberThreeEmail,
-          institution: memberThreeInstitution,
-          phone: memberThreePhone,
-          id_image: req.files.memberThreeIdImage
-            ? `${URL}/${req.files.memberThreeIdImage[0].filename}`
-            : req.team.member_three.id_image,
-          profile_image: req.files.memberThreeProfileImage
-            ? `${URL}/${req.files.memberThreeProfileImage[0].filename}`
-            : req.team.member_three.profile_image,
-        },
-      };
+        if (err instanceof multer.MulterError) {
+          return res.status(500).json({
+            error: true,
+            message: err.message,
+          });
+        }
 
-      if (
-        payload.member_one.id_image
-        && payload.member_two.id_image
-        && payload.member_three.id_image
-      ) {
-        await Team.findById(_id).then(async (team) => {
+        if (err) {
+          return res.status(500).json({
+            error: true,
+            message: err.message,
+          });
+        }
+
+        const payload = {
+          category,
+          member_one: {
+            name: memberOneName,
+            role: memberOneRole,
+            email: memberOneEmail,
+            institution: memberOneInstitution,
+            phone: memberOnePhone,
+            id_image: req.files.memberOneIdImage
+              ? `${URL}/${req.files.memberOneIdImage[0].filename}`
+              : team.member_one.id_image,
+            profile_image: req.files.memberOneProfileImage
+              ? `${URL}/${req.files.memberOneProfileImage[0].filename}`
+              : team.member_one.profile_image,
+          },
+          member_two: {
+            name: memberTwoName,
+            role: memberTwoRole,
+            email: memberTwoEmail,
+            institution: memberTwoInstitution,
+            phone: memberTwoPhone,
+            id_image: req.files.memberTwoIdImage
+              ? `${URL}/${req.files.memberTwoIdImage[0].filename}`
+              : team.member_two.id_image,
+            profile_image: req.files.memberTwoProfileImage
+              ? `${URL}/${req.files.memberTwoProfileImage[0].filename}`
+              : team.member_two.profile_image,
+          },
+          member_three: {
+            name: memberThreeName,
+            role: memberThreeRole,
+            email: memberThreeEmail,
+            institution: memberThreeInstitution,
+            phone: memberThreePhone,
+            id_image: req.files.memberThreeIdImage
+              ? `${URL}/${req.files.memberThreeIdImage[0].filename}`
+              : team.member_three.id_image,
+            profile_image: req.files.memberThreeProfileImage
+              ? `${URL}/${req.files.memberThreeProfileImage[0].filename}`
+              : team.member_three.profile_image,
+          },
+        };
+
+        if (
+          payload.member_one.id_image
+          && payload.member_two.id_image
+          && payload.member_three.id_image
+        ) {
           await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMessage`, {
             chat_id: 619360171,
             text: `UPDATE BIODATA\nStatus TIM: ${team.status ? 'AKTIF' : 'NON-AKTIF'}\n\nAda tim yang minta verifikasi nih, berikut URLnya\nhttps://playbox.erpn.us/team/${team._id}`,
@@ -222,17 +229,17 @@ module.exports = {
               ],
             });
           });
-        });
-      }
+        }
 
-      return Team.findByIdAndUpdate(_id, payload)
-        .then(() => res
-          .status(200)
-          .json({
-            error: false,
-            message: 'Berhasil update biodata tim',
-          }))
-        .catch((e) => res.status(500).json({ error: false, message: e.message }));
+        return Team.findByIdAndUpdate(_id, payload)
+          .then(() => res
+            .status(200)
+            .json({
+              error: false,
+              message: 'Berhasil update biodata tim',
+            }))
+          .catch((e) => res.status(500).json({ error: false, message: e.message }));
+      });
     });
   },
   updateIdeaTeam: async (req, res) => {
