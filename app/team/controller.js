@@ -50,9 +50,17 @@ module.exports = {
     const { id } = req.params;
     const { status } = req.body;
 
+    console.log(req.body);
+
     await Team.findByIdAndUpdate(id, { status })
-      .then((r) => {
-        res.redirect('/team');
+      .then(async (r) => {
+        if (r.category === 'INT') {
+          await Team.findByIdAndUpdate(id, { payment: { status } })
+            .then(() => res.redirect('/team'))
+            .catch(() => res.redirect('/'));
+        } else {
+          return res.redirect('/team');
+        }
       }).catch(() => {
         res.redirect('/');
       });

@@ -150,9 +150,6 @@ module.exports = {
 
       const payload = {
         category,
-        payment: {
-          status: category === 'INT',
-        },
         member_one: {
           name: memberOneName,
           role: memberOneRole,
@@ -200,33 +197,31 @@ module.exports = {
         && payload.member_three.id_image
       ) {
         await Team.findById(_id).then(async (team) => {
-          if (!team.status) {
-            await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+          await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMessage`, {
+            chat_id: 619360171,
+            text: `UPDATE BIODATA\nStatus TIM: ${team.status ? 'AKTIF' : 'NON-AKTIF'}\n\nAda tim yang minta verifikasi nih, berikut URLnya\nhttps://playbox.erpn.us/team/${team._id}`,
+          }).then(async () => {
+            await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMediaGroup`, {
               chat_id: 619360171,
-              text: `HALO ADMIN\nAda tim yang minta verifikasi nih, berikut URLnya\nhttps://playbox.erpn.us/team/${team._id}`,
-            }).then(async () => {
-              await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMediaGroup`, {
-                chat_id: 619360171,
-                media: [
-                  {
-                    type: 'photo',
-                    media: payload.member_one.id_image,
-                    caption: payload.member_one.role,
-                  },
-                  {
-                    type: 'photo',
-                    media: payload.member_two.id_image,
-                    caption: payload.member_two.role,
-                  },
-                  {
-                    type: 'photo',
-                    media: payload.member_three.id_image,
-                    caption: payload.member_three.role,
-                  },
-                ],
-              });
+              media: [
+                {
+                  type: 'photo',
+                  media: payload.member_one.id_image,
+                  caption: payload.member_one.role,
+                },
+                {
+                  type: 'photo',
+                  media: payload.member_two.id_image,
+                  caption: payload.member_two.role,
+                },
+                {
+                  type: 'photo',
+                  media: payload.member_three.id_image,
+                  caption: payload.member_three.role,
+                },
+              ],
             });
-          }
+          });
         });
       }
 
@@ -314,7 +309,7 @@ module.exports = {
           buyerEmail: r.email,
           buyerPhone: r.phone,
           referenceId: r._id,
-          paymentMethod,
+          // paymentMethod,
           expired: 1,
         };
 
