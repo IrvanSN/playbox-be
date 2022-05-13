@@ -206,25 +206,30 @@ module.exports = {
         ) {
           await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMessage`, {
             chat_id: 619360171,
-            text: `UPDATE BIODATA\nStatus TIM: ${team.status ? 'AKTIF' : 'NON-AKTIF'}\n\nAda tim yang minta verifikasi nih, berikut URLnya\nhttps://playbox.erpn.us/team/${team._id}`,
-          }).then(async () => {
+            text: `UPDATE BIODATA\n
+            Status TIM: ${team.status ? 'AKTIF' : 'NON-AKTIF'}\n
+            Nama TIM: ${team.name}\n\n
+            Ada tim yang minta verifikasi nih, berikut URLnya\n
+            https://playbox.erpn.us/team/${team._id}`,
+          }).then(async (r) => {
             await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMediaGroup`, {
               chat_id: 619360171,
+              reply_to_message_id: r.data.result.message_id,
               media: [
                 {
                   type: 'photo',
                   media: payload.member_one.id_image,
-                  caption: payload.member_one.role,
+                  caption: `${payload.member_one.name} (${payload.member_one.role})`,
                 },
                 {
                   type: 'photo',
                   media: payload.member_two.id_image,
-                  caption: payload.member_two.role,
+                  caption: `${payload.member_two.name} (${payload.member_two.role})`,
                 },
                 {
                   type: 'photo',
                   media: payload.member_three.id_image,
-                  caption: payload.member_three.role,
+                  caption: `${payload.member_three.name} (${payload.member_three.role})`,
                 },
               ],
             });
