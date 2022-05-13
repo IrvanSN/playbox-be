@@ -206,11 +206,7 @@ module.exports = {
         ) {
           await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMessage`, {
             chat_id: 619360171,
-            text: `UPDATE BIODATA\n
-            Status TIM: ${team.status ? 'AKTIF' : 'NON-AKTIF'}\n
-            Nama TIM: ${team.name}\n\n
-            Ada tim yang minta verifikasi nih, berikut URLnya\n
-            https://playbox.erpn.us/team/${team._id}`,
+            text: `UPDATE BIODATA\nStatus TIM: ${team.status ? 'AKTIF' : 'NON-AKTIF'}\nNama TIM: ${team.name}\n\nAda tim yang minta verifikasi nih, berikut URLnya\nhttps://playbox.erpn.us/team/${team._id}`,
           }).then(async (r) => {
             await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMediaGroup`, {
               chat_id: 619360171,
