@@ -13,7 +13,12 @@ module.exports = {
         const balance = await callAPI({ account: process.env.VA_IPAYMU }, 'POST', `${process.env.API_URL_IPAYMU}/balance`);
 
         res.render('home/index.ejs', {
-          title: 'Home', team: r, count, active, balance: balance.Data.MerchantBalance,
+          title: 'Home',
+          team: r,
+          count,
+          active,
+          balance: balance.Data.MerchantBalance,
+
         });
       })
       .catch(() => {
