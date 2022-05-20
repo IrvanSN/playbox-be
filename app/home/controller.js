@@ -11,7 +11,6 @@ module.exports = {
         const count = await Team.countDocuments({}).then((team) => team);
         const active = await Team.countDocuments({ status: true }).then((team) => team);
         const balance = await callAPI({ account: process.env.VA_IPAYMU }, 'POST', `${process.env.API_URL_IPAYMU}/balance`);
-        const paidCount = await Team.countDocuments({ 'payment.status': 'true' }).then((team) => team);
 
         const teamPaid = await Team.find({ 'payment.status': 'true' })
           .then((item) => {
@@ -47,7 +46,6 @@ module.exports = {
           count,
           active,
           balance: balance.Data.MerchantBalance,
-          paidCount,
           teamPaid,
           teamUnpaid,
         });
