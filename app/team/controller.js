@@ -50,8 +50,6 @@ module.exports = {
     const { id } = req.params;
     const { status } = req.body;
 
-    console.log(req.body);
-
     await Team.findByIdAndUpdate(id, { status })
       .then(async (r) => {
         if (r.category === 'INT') {

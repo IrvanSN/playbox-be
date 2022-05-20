@@ -36,13 +36,11 @@
                     <div class="panel">
                         <div class="miniStats--panel">
                             <div class="miniStats--header bg-darker">
+                                <h3 class="panel-title text-white">TOTAL PENDAPATAN</h3>
                             </div>
 
                             <div class="miniStats--body">
                                 <i class="miniStats--icon fa fa-money-bill-alt text-blue"></i>
-
-                                <p class="miniStats--caption text-blue">Total</p>
-                                <h3 class="miniStats--title h4">Pendapatan</h3>
                                 <p class="miniStats--num text-blue">
                                     Rp <%- new Intl.NumberFormat('de-DE').format(balance); %></p>
                             </div>
@@ -54,13 +52,11 @@
                     <div class="panel">
                         <div class="miniStats--panel">
                             <div class="miniStats--header bg-darker">
+                                <h3 class="panel-title text-white">TOTAL TIM AKTIF</h3>
                             </div>
 
                             <div class="miniStats--body">
                                 <i class="miniStats--icon fa fa-users text-orange"></i>
-
-                                <p class="miniStats--caption text-orange">Total</p>
-                                <h3 class="miniStats--title h4">Tim Aktif</h3>
                                 <p class="miniStats--num text-orange"><%- active; %></p>
                             </div>
                         </div>
@@ -71,39 +67,38 @@
                     <div class="panel">
                         <div class="miniStats--panel">
                             <div class="miniStats--header bg-darker">
+                                <h3 class="panel-title text-white">TOTAL SEMUA TIM</h3>
                             </div>
 
                             <div class="miniStats--body">
                                 <i class="miniStats--icon fa fa-users text-green"></i>
-                                <p class="miniStats--caption text-green">Total</p>
-                                <h3 class="miniStats--title h4">Semua Tim</h3>
                                 <p class="miniStats--num text-green"><%- count; %></p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-8">
                     <div class="panel">
                         <div class="miniStats--panel">
                             <div class="miniStats--header bg-darker">
-                                <p>TIM berdasarkan pembayaran</p>
+                                <h3 class="panel-title text-white">KATEGORI (STATUS PEMBAYARAN PAID)</h3>
                             </div>
                             <div class="miniStats--body">
-                                <canvas id="teamChart" width="50" height="50" aria-label="Hello ARIA World" role="img"></canvas>
+                                <canvas id="categoryChart" height='138' role="img"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="panel">
                         <div class="miniStats--panel">
                             <div class="miniStats--header bg-darker">
-                                <p>TIM berdasarkan pembayaran</p>
+                                <h3 class="panel-title text-white">STATUS PEMBAYARAN</h3>
                             </div>
                             <div class="miniStats--body">
-                                <canvas id="categoryChart" width="50" height="50" aria-label="Hello ARIA World" role="img"></canvas>
+                                <canvas id="teamChart" height='100' width='100' role="img"></canvas>
                             </div>
                         </div>
                     </div>
@@ -174,68 +169,48 @@
 <%- include('../parts/scripts') %>
 
 <script>
-    const teamChart = document.getElementById('teamChart');
-    const categoryChart = document.getElementById('categoryChart');
+  const teamChart = document.getElementById('teamChart');
+  const categoryChart = document.getElementById('categoryChart');
 
-    new Chart(teamChart, {
-      type: 'pie',
-      data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19, 3, 5, 2, 3],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
-          borderWidth: 1,
-        }],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
+  new Chart(teamChart, {
+    type: 'pie',
+    data: {
+      labels: ['PAID', 'UNPAID'],
+      datasets: [{
+        label: '',
+        data: [<%- paidCount; %>, <%- count - paidCount; %>],
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(75, 192, 192, 1)',
+        ],
+        borderWidth: 1,
+      }],
+    },
+  });
 
-    new Chart(categoryChart, {
-      type: 'pie',
-      data: {
-        labels: ['Red', 'Green'],
-        datasets: [{
-          label: '# of Votes',
-          data: [12, 19],
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255, 99, 132, 1)',
-            'rgba(75, 192, 192, 1)',
-          ],
-          borderWidth: 1,
-        }],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
+  new Chart(categoryChart, {
+    type: 'bar',
+    data: {
+      labels: ['Mahasiswa', 'SMA/SMK', 'Internal'],
+      datasets: [{
+        label: 'PAID',
+        data: [<%- mhsCount; %>, <%- smaCount; %>, <%- intCount; %>],
+        backgroundColor: [
+          'rgba(255, 159, 64, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 159, 64, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 206, 86, 1)',
+        ],
+        borderWidth: 1,
+      }],
+    },
+  });
 </script>
