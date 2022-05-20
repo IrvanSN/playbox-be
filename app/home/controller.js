@@ -8,18 +8,38 @@ module.exports = {
       .limit(10)
       .sort({ createdAt: 'descending' })
       .then(async (r) => {
-        const count = await Team.countDocuments({}).then((r) => r);
-        const active = await Team.countDocuments({ status: true }).then((r) => r);
+        const count = await Team.countDocuments({}).then((team) => team);
+        const active = await Team.countDocuments({ status: true }).then((team) => team);
         const balance = await callAPI({ account: process.env.VA_IPAYMU }, 'POST', `${process.env.API_URL_IPAYMU}/balance`);
-        const paidCount = await Team.countDocuments({ 'payment.status': 'true' }).then((r) => r);
-        const mhsCount = await Team.countDocuments({ 'payment.status': 'true', category: 'MHS' }).then((r) => r);
-        const smaCount = await Team.countDocuments({ 'payment.status': 'true', category: 'SMA' }).then((r) => r);
-        const intCount = await Team.countDocuments({ 'payment.status': 'true', category: 'INT' }).then((r) => r);
+        const paidCount = await Team.countDocuments({ 'payment.status': 'true' }).then((team) => team);
 
-        console.log('paidCount: ', paidCount);
-        console.log('mhsCount: ', mhsCount);
-        console.log('smaCount: ', smaCount);
-        console.log('intCount: ', intCount);
+        const teamPaid = await Team.find({ 'payment.status': 'true' })
+          .then((item) => {
+            const mhs = item.filter((team) => team.category === 'MHS').length;
+            const sma = item.filter((team) => team.category === 'SMA').length;
+            const int = item.filter((team) => team.category === 'INT').length;
+            const total = item.length;
+
+            return {
+              mhs, sma, int, total,
+            };
+          }).catch(() => ({
+            mhs: 0, sma: 0, int: 0, total: 0,
+          }));
+
+        const teamUnpaid = await Team.find({ 'payment.status': 'false' })
+          .then((item) => {
+            const mhs = item.filter((team) => team.category === 'MHS').length;
+            const sma = item.filter((team) => team.category === 'SMA').length;
+            const int = item.filter((team) => team.category === 'INT').length;
+            const total = item.length;
+
+            return {
+              mhs, sma, int, total,
+            };
+          }).catch(() => ({
+            mhs: 0, sma: 0, int: 0, total: 0,
+          }));
 
         res.render('home/index.ejs', {
           title: 'Home',
@@ -28,9 +48,8 @@ module.exports = {
           active,
           balance: balance.Data.MerchantBalance,
           paidCount,
-          mhsCount,
-          smaCount,
-          intCount,
+          teamPaid,
+          teamUnpaid,
         });
       })
       .catch(() => {

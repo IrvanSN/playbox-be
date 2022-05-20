@@ -82,7 +82,7 @@
                     <div class="panel">
                         <div class="miniStats--panel">
                             <div class="miniStats--header bg-darker">
-                                <h3 class="panel-title text-white">KATEGORI (STATUS PEMBAYARAN PAID)</h3>
+                                <h3 class="panel-title text-white">TIM BERDASARKAN KATEGORI</h3>
                             </div>
                             <div class="miniStats--body">
                                 <canvas id="categoryChart" height='138' role="img"></canvas>
@@ -178,9 +178,9 @@
       labels: ['PAID', 'UNPAID'],
       datasets: [{
         label: '',
-        data: [<%- paidCount; %>, <%- count - paidCount; %>],
+        data: [<%- teamPaid.total; %>, <%- teamUnpaid.total; %>],
         backgroundColor: [
-          'rgba(75, 192, 192, 0.2)',
+          'rgba(75, 192, 192, 0.5)',
           'rgba(255, 99, 132, 0.2)',
         ],
         borderColor: [
@@ -198,7 +198,21 @@
       labels: ['Mahasiswa', 'SMA/SMK', 'Internal'],
       datasets: [{
         label: 'PAID',
-        data: [<%- mhsCount; %>, <%- smaCount; %>, <%- intCount; %>],
+        data: [<%- teamPaid.mhs; %>, <%- teamPaid.sma; %>, <%- teamPaid.int; %>],
+        backgroundColor: [
+          'rgba(255, 159, 64, 0.5)',
+          'rgba(153, 102, 255, 0.5)',
+          'rgba(255, 99, 132, 0.5)',
+        ],
+        borderColor: [
+          'rgba(255, 159, 64, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 99, 132, 1)',
+        ],
+        borderWidth: 1,
+      }, {
+        label: 'UNPAID',
+        data: [<%- teamUnpaid.mhs; %>, <%- teamUnpaid.sma; %>, <%- teamUnpaid.int; %>],
         backgroundColor: [
           'rgba(255, 159, 64, 0.2)',
           'rgba(153, 102, 255, 0.2)',
