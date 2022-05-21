@@ -27,6 +27,11 @@ const teamRouter = require('./app/team/routes');
 
 const app = express();
 app.use(cors());
+app.use((req, res, next) => {
+  req.setHeader('Access-Control-Allow-Origin', '*');
+  req.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  next();
+});
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
