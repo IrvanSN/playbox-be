@@ -100,7 +100,7 @@ module.exports = {
     const product = generateProduct(moment().format(), 'MHS');
 
     if (product.price === 0) {
-      return res.status(500).json({ error: true, data: 'Pendaftaran di tutup!' });
+      return res.status(500).json({ error: true, message: 'Pendaftaran sudah di tutup!' });
     }
 
     const {
@@ -302,7 +302,7 @@ module.exports = {
         const product = generateProduct(moment(r.createdAt).format(), r.category);
 
         if (product.price === 0) {
-          return res.status(500).json({ error: true, data: 'Pendaftaran di tutup!' });
+          return res.status(500).json({ error: true, message: 'Pendaftaran sudah di tutup!' });
         }
 
         const body = {
