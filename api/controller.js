@@ -76,7 +76,7 @@ module.exports = {
 
     await Team.findById(id)
       .then((r) => {
-        const product = generateProduct(moment().add(1, 'd').format(), r.category);
+        const product = generateProduct(moment(r.createdAt).format(), r.category);
 
         res.status(200).json({ error: false, data: r, product });
       })
@@ -97,10 +97,10 @@ module.exports = {
   },
 
   addTeam: async (req, res) => {
-    const product = generateProduct(moment(r.createdAt).format(), r.category);
+    const product = generateProduct(moment().format(), 'MHS');
 
     if (product.price === 0) {
-      res.status(500).json({ error: true, data: 'Pendaftaran di tutup!' });
+      return res.status(500).json({ error: true, data: 'Pendaftaran di tutup!' });
     }
 
     const {
@@ -301,14 +301,8 @@ module.exports = {
 
         const product = generateProduct(moment(r.createdAt).format(), r.category);
 
-        if (!product) {
-          return res
-            .status(500)
-            .json({
-              error: true,
-              status: 5005,
-              message: 'Registrasi ditutup!',
-            });
+        if (product.price === 0) {
+          return res.status(500).json({ error: true, data: 'Pendaftaran di tutup!' });
         }
 
         const body = {
