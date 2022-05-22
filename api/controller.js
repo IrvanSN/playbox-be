@@ -76,7 +76,7 @@ module.exports = {
 
     await Team.findById(id)
       .then((r) => {
-        const product = generateProduct(moment().add(1, 'd').format(), r.category);
+        const product = generateProduct(moment(r.createdAt).format(), r.category);
 
         res.status(200).json({ error: false, data: r, product });
       })
