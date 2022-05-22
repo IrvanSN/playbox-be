@@ -100,7 +100,10 @@ module.exports = {
     const product = generateProduct(moment().format(), 'MHS');
 
     if (product.price === 0) {
-      return res.status(500).json({ error: true, message: 'Pendaftaran sudah di tutup!' });
+      return res.status(500).json({
+        error: true,
+        message: 'Pendaftaran Early Bird sudah di tutup! Silahkan tunggu di Main Registration di tanggal 6 juni 2022.',
+      });
     }
 
     const {
@@ -302,7 +305,10 @@ module.exports = {
         const product = generateProduct(moment(r.createdAt).format(), r.category);
 
         if (product.price === 0) {
-          return res.status(500).json({ error: true, message: 'Pendaftaran sudah di tutup!' });
+          return res.status(500).json({
+            error: true,
+            message: 'Pendaftaran Early Bird sudah di tutup! Silahkan tunggu di Main Registration di tanggal 6 juni 2022.',
+          });
         }
 
         const body = {
