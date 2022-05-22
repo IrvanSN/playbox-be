@@ -12,7 +12,7 @@ module.exports = {
         const active = await Team.countDocuments({ status: true }).then((team) => team);
         const balance = await callAPI({ account: process.env.VA_IPAYMU }, 'POST', `${process.env.API_URL_IPAYMU}/balance`);
 
-        const teamPaid = await Team.find({ 'payment.status': 'true' })
+        const teamPaid = await Team.find({ status: true, 'payment.status': 'true' })
           .then((item) => {
             const mhs = item.filter((team) => team.category === 'MHS').length;
             const sma = item.filter((team) => team.category === 'SMA').length;
@@ -26,7 +26,7 @@ module.exports = {
             mhs: 0, sma: 0, int: 0, total: 0,
           }));
 
-        const teamUnpaid = await Team.find({ 'payment.status': 'false' })
+        const teamUnpaid = await Team.find({ status: true, 'payment.status': 'false' })
           .then((item) => {
             const mhs = item.filter((team) => team.category === 'MHS').length;
             const sma = item.filter((team) => team.category === 'SMA').length;

@@ -7,7 +7,7 @@
     <%- include('../parts/navbar.ejs') %>
 
     <!-- Sidebar Start -->
-    <%- include('../parts/sidebar.ejs', {isActive: status === 'active' ? 'active-team' : status === 'inactive' ? 'inactive-team' : 'all-team'}) %>
+    <%- include('../parts/sidebar.ejs', { isActive: status === 'active' ? 'active-team' : status === 'inactive' ? 'inactive-team' : status === 'need-approval' ? 'need-approval-tab' : status === 'official-team' ? 'official-team-tab' : 'all-team' }) %>
 
     <!-- Main Container Start -->
     <main class="main--container">
@@ -23,9 +23,13 @@
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="/team">Tim</a></li>
                             <% if (status === 'active') { %>
-                                <li class="breadcrumb-item"><a href="/team?status=active">Aktif</a></li>
+                                <li class="breadcrumb-item"><a href="/team?status=<%- status %>">Aktif</a></li>
                             <% } else if (status === 'inactive') { %>
-                                <li class="breadcrumb-item"><a href="/team?status=active">Non-Aktif</a></li>
+                                <li class="breadcrumb-item"><a href="/team?status=<%- status %>">Non-Aktif</a></li>
+                            <% } else if (status === 'need-approval') { %>
+                                <li class="breadcrumb-item"><a href="/team?status=<%- status %>">Need Approval</a></li>
+                            <% } else if (status === 'official-team') { %>
+                                <li class="breadcrumb-item"><a href="/team?status=<%- status %>">Tim Official</a></li>
                             <% } %>
                         </ul>
                     </div>
@@ -49,6 +53,14 @@
                                 <button class="btn btn-sm btn-danger"
                                         disabled>Non-Aktif
                                 </button>
+                            <% } else if (status === 'need-approval') { %>
+                                <button class="btn btn-sm btn-warning"
+                                        disabled>Need Approval
+                                </button>
+                            <% } else if (status === 'official-team') { %>
+                                <button class="btn btn-sm btn-success"
+                                        disabled>Tim Official
+                                </button>
                             <% } %>
                         </h3>
                         <p>Data ditemukan <%- count; %></p>
@@ -68,7 +80,7 @@
             <div class="panel">
                 <!-- Records List Start -->
                 <div class="records--list"
-                     data-title="<%- status === 'active' ? 'TIM DENGAN STATUS AKTIF' : status === 'inactive' ? 'TIM DENGAN STATUS NON-AKTIF' : status === 'search' ? 'HASIL PENCARIAN' : 'SEMUA TIM'; %>">
+                     data-title="<%- status === 'active' ? 'TIM DENGAN STATUS AKTIF' : status === 'inactive' ? 'TIM DENGAN STATUS NON-AKTIF' : status === 'search' ? 'HASIL PENCARIAN' : status === 'need-approval' ? 'TIM MEMBUTUHKAN APPROVAL' : status === 'official-team' ? 'TIM RESMI TERDAFTAR' : 'SEMUA TIM'; %>">
                     <table id="recordsListView">
                         <thead>
                         <tr>

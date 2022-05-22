@@ -35,6 +35,18 @@
                                     Non-aktif</a></li>
                         </ul>
                     </li>
+                    <li class='<%- isActive === 'need-approval-tab' ? 'active' : ''; %>'>
+                        <a href="/team?status=need-approval">
+                            <i class="fa fa-exclamation"></i>
+                            <span>Need Approval</span>
+                        </a>
+                    </li>
+                    <li class='<%- isActive === 'official-team-tab' ? 'active' : ''; %>'>
+                        <a href="/team?status=official-team">
+                            <i class="fa fa-check"></i>
+                            <span>Official Tim</span>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

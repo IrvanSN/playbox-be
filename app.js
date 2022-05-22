@@ -26,12 +26,13 @@ const authRouter = require('./app/auth/routes');
 const teamRouter = require('./app/team/routes');
 
 const app = express();
-app.use(cors());
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-  next();
-});
+
+const corsOptions = {
+  origin: ['https://plbx.coderitts.tech', 'https://plbx.irvansn.com'],
+  methods: ['GET', 'PUT', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200,
+};
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -42,6 +43,7 @@ app.use(methodOverride('_method'));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
