@@ -56,6 +56,11 @@ module.exports = {
         };
       }
     }
+
+    return {
+      title: 'Registration closed!',
+      price: 0,
+    };
   },
 };
 

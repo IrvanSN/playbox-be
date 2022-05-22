@@ -97,19 +97,24 @@ module.exports = {
   },
 
   addTeam: async (req, res) => {
-    // const {
-    //   name, email, phone, password,
-    // } = req.body;
-    //
-    // await Team.create({
-    //   name,
-    //   email,
-    //   phone,
-    //   password,
-    // })
-    //   .then((r) => res.status(200).json({ error: false, data: r }))
-    //   .catch((e) => res.status(500).json({ error: true, message: e.message }));
-    res.status(500).json({ error: true, message: 'Pendaftaran di tutup!' });
+    const product = generateProduct(moment(r.createdAt).format(), r.category);
+
+    if (product.price === 0) {
+      res.status(500).json({ error: true, data: 'Pendaftaran di tutup!' });
+    }
+
+    const {
+      name, email, phone, password,
+    } = req.body;
+
+    await Team.create({
+      name,
+      email,
+      phone,
+      password,
+    })
+      .then((r) => res.status(200).json({ error: false, data: r }))
+      .catch((e) => res.status(500).json({ error: true, message: e.message }));
   },
   updateBiodataTeam: (req, res) => {
     const { _id } = req.team;
