@@ -40,7 +40,7 @@ module.exports = {
         .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const team = r.filter((item) => (item.member_one.id_image !== '' && item.member_two.id_image !== '' && item.member_three.id_image !== ''));
-          const count = r.length;
+          const count = team.length;
 
           return res.render('team/index.ejs', {
             title: 'Tim Official - PLAYBOX Season 3', team, status, count,

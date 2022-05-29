@@ -104,6 +104,19 @@
                     </div>
                 </div>
 
+                <div class="col-md-12">
+                    <div class="panel">
+                        <div class="miniStats--panel">
+                            <div class="miniStats--header bg-darker">
+                                <h3 class="panel-title text-white">REGISTRASI BERDASARKAN TANGGAL</h3>
+                            </div>
+                            <div class="miniStats--body">
+                                <canvas id="registrationChart" height='100' role="img"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="col-xl-12">
                     <div class="panel">
                         <div class="panel-heading">
@@ -171,6 +184,7 @@
 <script>
   const teamChart = document.getElementById('teamChart');
   const categoryChart = document.getElementById('categoryChart');
+  const registrationChart = document.getElementById('registrationChart')
 
   new Chart(teamChart, {
     type: 'pie',
@@ -235,5 +249,26 @@
         }]
       }
     },
+  });
+
+  moment.locale('id');
+  const dateParse = [];
+  for (let i = moment(<%- startDate; %>); i.isBefore(<%- endDate; %>); i.add(1, 'days')) {
+    dateParse.push(i.format('DD-MM'));
+  }
+
+  new Chart(registrationChart, {
+    type: 'line',
+    data: {
+      labels: dateParse,
+      datasets: [{
+        label: 'ALL',
+        data: [<%- datesCount; %>],
+        fill: false,
+        backgroundColor: '#2196f3',
+        borderColor: '#2196f3',
+        borderWidth: 1,
+      }],
+    }
   });
 </script>

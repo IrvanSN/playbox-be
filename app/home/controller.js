@@ -1,3 +1,4 @@
+const moment = require('moment');
 const Team = require('../team/model');
 const { callAPI } = require('../../config/ipaymu');
 
@@ -40,6 +41,17 @@ module.exports = {
             mhs: 0, sma: 0, int: 0, total: 0,
           }));
 
+        const teams = await Team.find({}).then((r) => r);
+        const startDate = moment('2022-05-09');
+        const endDate = moment();
+        const dates = [];
+        const datesCount = [];
+
+        for (let i = moment(startDate); i.isBefore(endDate); i.add(1, 'days')) {
+          dates.push(i.format('DD-MM'));
+        }
+        dates.map((date) => datesCount.push(teams.filter((team) => moment(team.createdAt).format('DD-MM') === date).length));
+
         res.render('home/index.ejs', {
           title: 'Home',
           team: r,
@@ -48,10 +60,31 @@ module.exports = {
           balance: balance.Data.MerchantBalance,
           teamPaid,
           teamUnpaid,
+          dates,
+          datesCount,
+          startDate,
+          endDate,
         });
       })
       .catch(() => {
         res.redirect('/auth');
       });
+  },
+  test: async (req, res) => {
+    // const teams = await Team.find({}).then((r) => r);
+    // const startDate = moment('2022-05-09');
+    // const endDate = moment();
+    // const dates = [];
+    // const datesCount = [];
+    //
+    // for (let i = moment(startDate); i.isBefore(endDate); i.add(1, 'days')) {
+    //   dates.push(i.format('DD-MM-YYYY'));
+    // }
+    //
+    // dates.map((date) => datesCount.push(teams.filter((team) => moment(team.createdAt).format('DD-MM-YYYY') === date).length));
+    //
+    // console.log(dates);
+    // console.log(datesCount);
+    res.send('ok');
   },
 };
