@@ -152,6 +152,7 @@ module.exports = {
         } = req.body;
 
         if (err instanceof multer.MulterError) {
+          console.log('err instance multer: ', err);
           return res.status(500).json({
             error: true,
             message: err.message,
@@ -159,6 +160,7 @@ module.exports = {
         }
 
         if (err) {
+          console.log('err if: ', err);
           return res.status(500).json({
             error: true,
             message: err.message,
