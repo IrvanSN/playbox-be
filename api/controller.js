@@ -152,7 +152,6 @@ module.exports = {
         } = req.body;
 
         if (err instanceof multer.MulterError) {
-          console.log('err instance multer: ', err);
           return res.status(500).json({
             error: true,
             message: err.message,
@@ -160,7 +159,6 @@ module.exports = {
         }
 
         if (err) {
-          console.log('err if: ', err);
           return res.status(500).json({
             error: true,
             message: err.message,
@@ -218,29 +216,14 @@ module.exports = {
           await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMessage`, {
             chat_id: 619360171,
             text: `UPDATE BIODATA\nStatus TIM: ${team.status ? 'AKTIF' : 'NON-AKTIF'}\nNama TIM: ${team.name}\n\nAda tim yang minta verifikasi nih, berikut URLnya\nhttps://playbox.erpn.us/team/${team._id}`,
-          }).then(async (r) => {
-            await axios.post(`${process.env.TELEGRAM_API_URL}${process.env.TELEGRAM_TOKEN}/sendMediaGroup`, {
-              chat_id: 619360171,
-              reply_to_message_id: r.data.result.message_id,
-              media: [
-                {
-                  type: 'photo',
-                  media: payload.member_one.id_image,
-                  caption: `${payload.member_one.name} (${payload.member_one.role})`,
-                },
-                {
-                  type: 'photo',
-                  media: payload.member_two.id_image,
-                  caption: `${payload.member_two.name} (${payload.member_two.role})`,
-                },
-                {
-                  type: 'photo',
-                  media: payload.member_three.id_image,
-                  caption: `${payload.member_three.name} (${payload.member_three.role})`,
-                },
-              ],
-            });
-          });
+          }).then(() => Team.findByIdAndUpdate(_id, payload)
+            .then(() => res
+              .status(200)
+              .json({
+                error: false,
+                message: 'Berhasil update biodata tim',
+              }))
+            .catch((e) => res.status(500).json({ error: false, message: e.message })));
         }
 
         return Team.findByIdAndUpdate(_id, payload)
