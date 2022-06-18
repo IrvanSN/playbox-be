@@ -5,6 +5,8 @@ const axios = require('axios');
 const Team = require('../app/team/model');
 const { callAPI, generateProduct } = require('../config/ipaymu');
 
+const isClosed = moment().isAfter('2022-06-23 24:00');
+
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/uploads');
@@ -102,7 +104,7 @@ module.exports = {
     if (product.price === 0) {
       return res.status(500).json({
         error: true,
-        message: 'Pendaftaran Early Bird sudah di tutup! Silahkan tunggu di Main Registration di tanggal 6 juni 2022.',
+        message: 'Pendaftaran sudah di tutup!',
       });
     }
 
@@ -241,6 +243,13 @@ module.exports = {
     const { _id } = req.team;
     const { idea } = req.body;
 
+    if (isClosed) {
+      return res.status(500).json({
+        error: true,
+        message: 'Update ide sudah ditutup!',
+      });
+    }
+
     Team.findByIdAndUpdate(_id, { idea })
       .then(() => res
         .status(200)
@@ -253,6 +262,15 @@ module.exports = {
 
     await Team.findById(_id)
       .then(async (r) => {
+        const product = generateProduct(moment(r.createdAt).format(), r.category);
+
+        if (isClosed) {
+          return res.status(500).json({
+            error: true,
+            message: 'Pembayaran sudah ditutup!',
+          });
+        }
+
         if (!paymentMethod) {
           return res.status(500).json({
             error: true,
@@ -286,8 +304,6 @@ module.exports = {
               message: 'Anda sudah melakukan pembayaran!',
             });
         }
-
-        const product = generateProduct(moment(r.createdAt).format(), r.category);
 
         if (product.price === 0) {
           return res.status(500).json({
