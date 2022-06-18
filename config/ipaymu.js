@@ -26,7 +26,7 @@ module.exports = {
   },
   generateProduct: (date, category) => {
     const earlyBird = moment(date).isBetween('2022-05-09', '2022-05-30');
-    const mainRegistration = moment(date).isBetween('2022-06-06', '2022-06-18');
+    const mainRegistration = moment(date).isBetween('2022-06-06', '2022-06-19');
     const fee = 5000;
 
     if (earlyBird) {
