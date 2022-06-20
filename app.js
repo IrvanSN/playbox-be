@@ -28,7 +28,7 @@ const teamRouter = require('./app/team/routes');
 const app = express();
 
 const corsOptions = {
-  origin: ['https://plbx.coderitts.tech', 'https://plbx.irvansn.com', 'http://localhost:5050'],
+  origin: ['https://plbx.coderitts.tech', 'https://dev-pb-fe.erpn.us', 'http://localhost:5050'],
   methods: ['GET', 'PUT', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200,
