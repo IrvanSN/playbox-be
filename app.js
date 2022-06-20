@@ -27,12 +27,12 @@ const teamRouter = require('./app/team/routes');
 
 const app = express();
 
-const corsOptions = {
-  origin: ['https://plbx.coderitts.tech', 'https://dev-pb-fe.erpn.us', 'http://localhost:5050'],
-  methods: ['GET', 'PUT', 'POST'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  optionsSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: ['https://plbx.coderitts.tech', 'https://dev-pb-fe.erpn.us', 'http://localhost:5050'],
+//   methods: ['GET', 'PUT', 'POST'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   optionsSuccessStatus: 200,
+// };
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -43,7 +43,8 @@ app.use(methodOverride('_method'));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
+app.use(cors());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
