@@ -97,7 +97,7 @@ module.exports = {
         const count = r.length;
 
         return res.render('team/index.ejs', {
-          title: 'Cari Tim - PLAYBOX Season 3', team: r, status: 'search', count,
+          title: 'Cari Tim - PLAYBOX Season 3', team: r, status: 'search', count, moment,
         });
       });
   },
