@@ -1,4 +1,7 @@
+const moment = require('moment');
 const Team = require('./model');
+
+moment.locale('id');
 
 module.exports = {
   index: async (req, res) => {
@@ -6,54 +9,54 @@ module.exports = {
 
     if (status === 'active') {
       Team.find({ status: true })
-        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
+        .select('createdAt name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const count = r.length;
 
           return res.render('team/index.ejs', {
-            title: 'Tim Aktif - PLAYBOX Season 3', team: r, status, count,
+            title: 'Tim Aktif - PLAYBOX Season 3', team: r, status, count, moment,
           });
         });
     } else if (status === 'inactive') {
       Team.find({ status: false })
-        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
+        .select('createdAt name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const count = r.length;
 
           return res.render('team/index.ejs', {
-            title: 'Tim Non-Aktif - PLAYBOX Season 3', team: r, status, count,
+            title: 'Tim Non-Aktif - PLAYBOX Season 3', team: r, status, count, moment,
           });
         });
     } else if (status === 'official-team') {
       Team.find({ status: true, 'payment.status': 'true' })
-        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
+        .select('createdAt name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const team = r.filter((item) => (item.member_one.id_image !== '' && item.member_two.id_image !== '' && item.member_three.id_image !== ''));
           const count = r.length;
 
           return res.render('team/index.ejs', {
-            title: 'Tim Official - PLAYBOX Season 3', team, status, count,
+            title: 'Tim Official - PLAYBOX Season 3', team, status, count, moment,
           });
         });
     } else if (status === 'need-approval') {
       Team.find({ status: false })
-        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
+        .select('createdAt name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const team = r.filter((item) => (item.member_one.id_image !== '' && item.member_two.id_image !== '' && item.member_three.id_image !== ''));
           const count = team.length;
 
           return res.render('team/index.ejs', {
-            title: 'Tim Official - PLAYBOX Season 3', team, status, count,
+            title: 'Tim Official - PLAYBOX Season 3', team, status, count, moment,
           });
         });
     } else {
       Team.find({})
-        .select('name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
+        .select('createdAt name email phone category status idea.title payment.status member_one.id_image member_two.id_image member_three.id_image')
         .then((r) => {
           const count = r.length;
 
           return res.render('team/index.ejs', {
-            title: 'Semua Tim - PLAYBOX Season 3', team: r, status, count,
+            title: 'Semua Tim - PLAYBOX Season 3', team: r, status, count, moment,
           });
         });
     }
