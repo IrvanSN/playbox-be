@@ -65,11 +65,7 @@ module.exports = {
     const { id } = req.params;
 
     await Team.findById(id)
-      .then((r) => {
-        res.render('team/view-detail.ejs', { title: `${r.name} - PLAYBOX Season 3`, team: r, status: undefined });
-      }).catch(() => {
-        res.redirect('/');
-      });
+      .then((r) => res.render('team/view-detail.ejs', { title: `${r.name} - PLAYBOX Season 3`, team: r, status: undefined })).catch((e) => res.redirect('/team'));
   },
   updateTeam: async (req, res) => {
     const { id } = req.params;
