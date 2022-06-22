@@ -331,40 +331,59 @@
                 <div class='col-lg-12'>
                     <div class="panel">
                         <div class="panel-heading text-center">
-                            <h3 class="panel-title float-none ">ACTION</h3>
+                            <h3 class="panel-title float-none ">AKSI</h3>
                         </div>
 
                         <div class="panel-content panel-about text-center">
                             <div class="row gutter-20">
-                                <div class='col-lg-6'>
+                                <div class='col-lg-4'>
                                     <form method='post' action='/team/<%- team._id; %>/update'>
                                         <input type='text' name='status' value='true' hidden>
                                         <button type='submit'
                                                 class="btn btn-rounded btn-success">
-                                            Aktifkan Akun ini
+                                            Aktifkan
                                         </button>
                                     </form>
                                 </div>
-                                <div class='col-lg-6'>
+                                <div class='col-lg-4'>
                                     <form method='post' action='/team/<%- team._id; %>/update'>
                                         <input type='text' name='status' value='false' hidden>
                                         <button type='submit'
                                                 class="btn btn-rounded btn-danger">
-                                            non-Aktifkan Akun ini
+                                            non-Aktifkan
                                         </button>
                                     </form>
                                 </div>
+                                <div class='col-lg-4'>
+                                    <button type="button" class="btn btn-rounded" style='background-color: #ffc107' data-toggle="modal" data-target="#delete-modal">
+                                        Hapus
+                                    </button>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="panel-content panel-about text-center">
-                            <form method='POST' action='/team/<%- team._id; %>/delete?_method=DELETE'>
-                                <input type='text' name='status' value='true' hidden>
-                                <button type='submit'
-                                        class="btn btn-rounded btn-danger">
-                                    Hapus akun ini
+                <div class="modal fade" id="delete-modal" tabindex="-1" role="dialog" aria-labelledby="delete-modal-label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Hapus Akun</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
                                 </button>
-                            </form>
+                            </div>
+                            <div class="modal-body">
+                                Apakah anda yakin akan menghapus akun ini?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-rounded" data-dismiss="modal">TUTUP</button>
+                                <form method='POST' action='/team/<%- team._id; %>/delete?_method=DELETE'>
+                                    <button type='submit' class="btn btn-rounded btn-danger">
+                                        IYA, HAPUS AKUN INI
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
