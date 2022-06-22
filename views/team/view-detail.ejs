@@ -356,6 +356,16 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="panel-content panel-about text-center">
+                            <form method='POST' action='/team/<%- team._id; %>/delete?_method=DELETE'>
+                                <input type='text' name='status' value='true' hidden>
+                                <button type='submit'
+                                        class="btn btn-rounded btn-danger">
+                                    Hapus akun ini
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <!-- Edit Product End -->

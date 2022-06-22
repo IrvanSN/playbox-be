@@ -97,4 +97,10 @@ module.exports = {
         });
       });
   },
+  deleteTeam: async (req, res) => {
+    const { id } = req.params;
+
+    Team.findByIdAndDelete(id)
+      .then(() => res.redirect('/team')).catch(() => res.redirect(`/team/${id}`));
+  },
 };
