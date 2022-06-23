@@ -5,7 +5,7 @@ const axios = require('axios');
 const Team = require('../app/team/model');
 const { callAPI, generateProduct } = require('../config/ipaymu');
 
-const isClosed = moment().isAfter('2022-06-23 24:00');
+const isClosed = moment().isAfter('2022-06-24 24:00');
 
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {

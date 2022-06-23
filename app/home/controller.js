@@ -43,13 +43,14 @@ module.exports = {
 
         const teams = await Team.find({}).then((r) => r);
         const startDate = moment('2022-05-09');
-        const endDate = moment();
+        const endDate = moment('2022-06-24');
         const dates = [];
         const datesCount = [];
 
         for (let i = moment(startDate); i.isBefore(endDate); i.add(1, 'days')) {
           dates.push(i.format('DD-MM'));
         }
+
         dates.map((date) => datesCount.push(teams.filter((team) => moment(team.createdAt).format('DD-MM') === date).length));
 
         res.render('home/index.ejs', {
